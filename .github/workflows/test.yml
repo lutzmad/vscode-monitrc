@@ -1,0 +1,29 @@
+name: Test
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 20.x
+          registry-url: https://registry.npmjs.org/
+
+      - name: Install the dependencies
+        run: npm install
+
+      - name: Install vsce
+        run: npm install -g vsce
+
+      - name: Build
+        run: vsce package
+
+      - name: List
+        run: ls -latr
+

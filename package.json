@@ -1,0 +1,38 @@
+{
+  "name": "monitrc",
+  "displayName": "MonitRC",
+  "description": "A simple MonitRC syntax highlighting extension.",
+  "version": "0.0.1",
+  "author": "Lutz Mader",
+  "publisher": "lutzmad",
+  "contributors": [
+    {
+      "name": "Lutz Mader",
+      "email": "lutz.mader@freenet.de"
+    }
+  ],
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.55.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/lutzmad/vscode-monitrc"
+  },
+  "contributes": {
+    "languages": [{
+      "id": "monit",
+      "aliases": ["MonitRC", "monitrc", "monit"],
+      "extensions": ["monitrc",".cfg"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "monit",
+      "scopeName": "source.monit",
+      "path": "./syntaxes/monit.tmLanguage.json"
+    }]
+  }
+}
