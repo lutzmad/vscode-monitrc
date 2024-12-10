@@ -483,7 +483,7 @@
 				},{
 					"include": "#noises"
 				},{
-					"include": "#commants"
+					"include": "#commands"
 				}]
 			},{
 				"name": "keyword.control.file.monit",
@@ -497,7 +497,7 @@
 				},{
 					"include": "#noises"
 				},{
-					"include": "#commants"
+					"include": "#commands"
 				}]
 			},{
 				"name": "keyword.control.filesystem.monit",
@@ -511,7 +511,7 @@
 				},{
 					"include": "#noises"
 				},{
-					"include": "#commants"
+					"include": "#commands"
 				}]
 			},{
 				"name": "keyword.control.directory.monit",
@@ -525,7 +525,7 @@
 				},{
 					"include": "#noises"
 				},{
-					"include": "#commants"
+					"include": "#commands"
 				}]
 			},{
 				"name": "keyword.control.host.monit",
@@ -539,7 +539,7 @@
 				},{
 					"include": "#noises"
 				},{
-					"include": "#commants"
+					"include": "#commands"
 				}]
 			},{
 				"name": "keyword.control.network.monit",
@@ -556,7 +556,7 @@
 				},{
 					"include": "#noises"
 				},{
-					"include": "#commants"
+					"include": "#commands"
 				}]
 			},{
 				"name": "keyword.control.system.monit",
@@ -567,7 +567,7 @@
 				},{
 					"include": "#noises"
 				},{
-					"include": "#commants"
+					"include": "#commands"
 				}]
 			},{
 				"name": "keyword.control.fifo.monit",
@@ -581,7 +581,7 @@
 				},{
 					"include": "#noises"
 				},{
-					"include": "#commants"
+					"include": "#commands"
 				}]
 			},{
 				"name": "keyword.control.program.monit",
@@ -595,7 +595,7 @@
 				},{
 					"include": "#noises"
 				},{
-					"include": "#commants"
+					"include": "#commands"
 				}]
 			}]
 		},
@@ -1773,15 +1773,17 @@
 		},
 		"functions": {
 			"comment": "Monit functions",
-			"name": "support.function.monit",
-			"begin": "[\\w\\d_]*\\(",
-			"end": "\\)",
-			"patterns": [{ "include": "#expressions" }]
+			"patterns": [{
+				"name": "support.function.monit",
+				"begin": "[\\w\\d_]*\\(",
+				"end": "\\)",
+				"patterns": [{ "include": "#expressions" }]
+			}]
 		},
 		"constants": {
 			"comment": "Monit constant keywords",
 			"patterns": [{
-				"name": "constant.language.monit",
+				"name": "support.constant.monit",
 				"match": "\\b(\\$EVENT|\\$SERVICE|\\$DATE|\\$HOST|\\$ACTION|\\$DESCRIPTION|\\$SYSTEM)\\b"
 			}]
 		},
@@ -1896,15 +1898,17 @@
 		},
 		"includes": {
 			"comment": "Monit include keywords",
-			"begin": "(?i)\\b(include)\\b",
-			"end": "(?i)\\b(?=(check|set|include))\\b",
-			"captures": {
-				"1": { "name": "keyword.control.include.monit" }
-			},
 			"patterns": [{
-				"include": "#paths"
-			},{
-				"include": "#comments"
+				"begin": "(?i)\\b(include)\\b",
+				"end": "(?i)\\b(?=(check|set|include))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.include.monit" }
+				},
+				"patterns": [{
+					"include": "#paths"
+				},{
+					"include": "#comments"
+				}]
 			}]
 		}
 	},
