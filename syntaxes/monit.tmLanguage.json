@@ -2581,8 +2581,10 @@
 			"comment": "Monit functions",
             "patterns": [{
 				"name": "support.function.monit",
-				"begin": "[\\w\\d_]*\\(",
-				"end": "\\)"
+				"begin": "\\b([\\w\\d_]+)(\\()",
+				"end": "\\)",
+				"patterns": [{ "include": "source.shell"
+				}]
 			}]
 		},
 		"constants": {
