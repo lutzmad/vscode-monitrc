@@ -1,15 +1,16 @@
 {
 	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
 	"name": "monit",
-	"patterns": [{ "include": "#sets" },
+	"patterns": [{ "include": "#comments" },
+		{ "include": "#sets" },
 		{ "include": "#checks" },
-		{ "include": "#includes" },
-		{ "include": "#comments"
+		{ "include": "#includes"
 	}],
 	"repository": {
 		"expressions": {
-			"patterns": [{ "include": "#constants" },
-				{ "include": "#comments"
+			"patterns": [{ "include": "#comments" },
+				{ "include": "#noises" },
+				{ "include": "#constants"
 			}]
 		},
 		"keywords": {
@@ -27,17 +28,17 @@
 					"1": { "name": "keyword.control.setalert.monit" },
 					"2": { "name": "constant.character.monit" }
 				},
-				"patterns": [{ 
+				"patterns": [{
 					"begin": "(?i)(not[ ]+)?(on[ ]+)?\\{",
-					"end": "\\}",
+					"end": "(\\})",
 					"captures": {
 						"0": { "name": "keyword.control.setalert.monit" }
 					},
-					"patterns": [{ "include": "#eventoptions" },
+					"patterns": [{ "include": "#eventoption" },
 						{ "include": "#comments"
 					}]
 				},{
-					"match": "(?i)\\b((with[ ]+)?remainder([ ]+on)?)([ ]+[\\d]+)([ ]+cycle(s)?)?\\b",
+					"match": "(?i)\\b((with[ ]+)?reminder([ ]+on)?)([ ]+[\\d]+)([ ]+cycle(s)?)?\\b",
 					"captures": {
 						"1": { "name": "keyword.control.setalert.monit" },
 						"2": { "name": "keyword.control.setalert.monit" },
@@ -45,7 +46,8 @@
 						"4": { "name": "constant.numeric.monit" },
 						"5": { "name": "keyword.control.setalert.monit" }
 					}
-				},{ "include": "#comments"
+				},{ "include": "#comments" },
+					{ "include": "#reminder"
 				}]
 			},{
 				"begin": "(?i)\\b(set[ ]+daemon[ ]+)([\\d]+)\\b",
@@ -75,13 +77,14 @@
 				}]
 			},{
 				"begin": "(?i)\\b(set[ ]+init)\\b",
-				"end": "(?i)\\b(?=(check|set|include))\\b",				"captures": {
+				"end": "(?i)\\b(?=(check|set|include))\\b",
+				"captures": {
 					"1": { "name": "keyword.control.setinit.monit" }
 				},
 				"patterns": [{ "include": "#comments"
 				}]
 			},{
-				"begin": "(?i)\\b(set[ ]+onreboot[ ]+)(start|nostart|laststate)?\\b",
+				"begin": "(?i)\\b(set[ ]+onreboot[ ]+)(start|nostart|laststate)\\b",
 				"end": "(?i)\\b(?=(check|set|include))\\b",
 				"captures": {
 					"1": { "name": "keyword.control.setonreboot.monit" },
@@ -96,8 +99,8 @@
 					"1": { "name": "keyword.control.setexpectbuffer.monit" },
 					"2": { "name": "constant.numeric.monit" }
 				},
-				"patterns": [{ "include": "#units"},
-					{ "include": "#comments"
+				"patterns": [{ "include": "#comments" },
+					{ "include": "#units"
 				}]
 			},{
 				"begin": "(?i)\\b(set[ ]+limits)\\b",
@@ -106,14 +109,14 @@
 					"1": { "name": "keyword.control.setlimit.monit" }
 				},
 				"patterns": [{
-					"begin": "\\{",
-					"end": "\\}",
+					"begin": "(\\{)",
+					"end": "(\\})",
 					"captures": {
 						"1": { "name": "keyword.control.setlimit.monit" }
 					},
-					"patterns": [{ "include": "#buffers" },
-						{ "include": "#timeouts" },
-						{ "include": "#comments"
+					"patterns": [{ "include": "#comments" },
+						{ "include": "#limitbuffer" },
+						{ "include": "#limittimeout"
 					}]
 				},{ "include": "#comments"
 				}]
@@ -129,9 +132,7 @@
 				"begin": "(?i)\\b(set[ ]+(logfile|log)[ ]+syslog)\\b",
 				"end": "(?i)\\b(?=(check|set|include))\\b",
 				"captures": {
-					"1": { "name": "keyword.control.setlogfile.monit" },
-					"2": { "name": "keyword.control.setlogfile.monit" },
-					"3": { "name": "keyword.control.setlogfile.monit" }
+					"1": { "name": "keyword.control.setlogfile.monit" }
 				},
 				"patterns": [{
 					"name": "keyword.control.setlogfile.monit",
@@ -140,7 +141,7 @@
 					"match": "(?i)\\b(facility[ ]+)(log_local[0-7]|log_daemon|log_user)\\b",
 					"captures": {
 						"1": { "name": "keyword.control.setlogfile.monit" },
-						"2": { "name": "constant.character.monit" }
+						"2": { "name": "constant.language.monit" }
 					}
 				},{ "include": "#comments"
 				}]
@@ -148,11 +149,10 @@
 				"begin": "(?i)\\b(set[ ]+(logfile|log))\\b",
 				"end": "(?i)\\b(?=(check|set|include))\\b",
 				"captures": {
-					"1": { "name": "keyword.control.setlogfile.monit" },
-					"2": { "name": "keyword.control.setlogfile.monit" }
+					"1": { "name": "keyword.control.setlogfile.monit" }
 				},
-				"patterns": [{ "include": "#paths" },
-					{ "include": "#comments"
+				"patterns": [{ "include": "#comments" },
+					{ "include": "#paths"
 				}]
 			},{
 				"begin": "(?i)\\b(set[ ]+eventqueue)\\b",
@@ -171,8 +171,8 @@
 						"1": { "name": "keyword.control.seteventqueue.monit" },
 						"3": { "name": "constant.numeric.monit" }
 					}
-				},{ "include": "#paths" },
-				{ "include": "#comments"
+				},{ "include": "#comments" },
+					{ "include": "#paths"
 				}]
 			},{
 				"begin": "(?i)\\b(set[ ]+idfile)\\b",
@@ -180,8 +180,8 @@
 				"captures": {
 					"1": { "name": "keyword.control.setidfile.monit" }
 				},
-				"patterns": [{ "include": "#paths" },
-					{ "include": "#comments"
+				"patterns": [{ "include": "#comments" },
+					{ "include": "#paths"
 				}]
 			},{
 				"begin": "(?i)\\b(set[ ]+statefile)\\b",
@@ -189,8 +189,8 @@
 				"captures": {
 					"1": { "name": "keyword.control.setstatefile.monit" }
 				},
-				"patterns": [{ "include": "#paths" },
-					{ "include": "#comments"
+				"patterns": [{ "include": "#comments" },
+					{ "include": "#paths"
 				}]
 			},{
 				"begin": "(?i)\\b(set[ ]+pidfile)\\b",
@@ -198,8 +198,8 @@
 				"captures": {
 					"1": { "name": "keyword.control.setpidfile.monit" }
 				},
-				"patterns": [{ "include": "#paths" },
-					{ "include": "#comments"
+				"patterns": [{ "include": "#comments" },
+					{ "include": "#paths"
 				}]
 			},{
 				"begin": "(?i)\\b(set[ ]+mmonit)\\b",
@@ -208,8 +208,10 @@
 					"1": { "name": "keyword.control.setmmonit.monit" }
 				},
 				"patterns": [{
-					"name": "keyword.control.setmmonit.monit",
-					"match": "(?i)\\b(http(s)?:\\/\\/(([\\w]+:)?([\\w]+)@)?[\\w\\-_.:\\/]+)"
+					"match": "(?i)\\b(http(s)?:\\/\\/(([\\w]+:)?([\\w]+)@)?[\\w\\-_.:\\/]+)",
+					"captures": {
+						"1": { "name": "constant.character.monit" }
+					}
 				},{
 					"match": "(?i)\\b(timeout[ ]+)([\\d]+)([ ]+(seconds|second|s))?",
 					"captures": {
@@ -218,34 +220,40 @@
 						"3": { "name": "keyword.control.setmmonit.monit" }
 					}
 				},{
-					"match": "(?i)\\b((with[ ]+)?hostgroups[ ]+(\\[([ ]+)?(\"[^\"]+\"|'[^']+'|[\\w]+)([ ]+)?\\]))",
+					"begin": "(?i)\\b((with[ ]+)?(hostgroups[ ]+)?(\\[))",
+					"end": "\\b(\\])\\b",
 					"captures": {
-						"1": { "name": "keyword.control.setmmonit.monit" },
-						"2": { "name": "keyword.control.setmmonit.monit" },
-						"3": { "name": "constant.character.monit" }
-					}
+						"1": { "name": "keyword.control.setmmonit.monit" }
+					},
+					"patterns": [{ "include": "#comments" },
+						{ "include": "#strings"
+					}]
 				},{
 					"name": "keyword.control.setmmonit.monit",
 					"match": "(?i)\\b(register([ ]+without)?[ ]+credentials)"
-				},{ "include": "#noises" },
-					{ "include": "#comments"
+				},{ "include": "#comments" },
+					{ "include": "#noises" },
+					{ "include": "#ssl" },
+					{ "include": "#sslchecksum" },
+					{ "include": "#sslversion" },
+					{ "include": "#certmd5"
 				}]
 			},{
 				"begin": "(?i)\\b(set[ ]+(tls|ssl[ ]+enable|enable[ ]+ssl|ssl))\\b",
 				"end": "(?i)\\b(?=(check|set|include))\\b",
 				"captures": {
-					"1": { "name": "keyword.control.setssl.monit" },
-					"2": { "name": "keyword.control.setssl.monit" }
+					"1": { "name": "keyword.control.setssl.monit" }
 				},
 				"patterns": [{
-					"begin": "\\{",
-					"end": "\\}",
+					"begin": "(\\{)",
+					"end": "(\\})",
 					"captures": {
 						"1": { "name": "keyword.control.setssl.monit" }
 					},
-					"patterns": [{ "include": "#ssls" },
-						{ "include": "#comments"
+					"patterns": [{ "include": "#comments" },
+						{ "include": "#ssloption"
 					}]
+				},{ "include": "#comments"
 				}]
 			},{
 				"begin": "(?i)\\b(set[ ]+mailserver)\\b",
@@ -260,36 +268,44 @@
 						"2": { "name": "constant.numeric.monit" }
 					}
 				},{
-					"match": "(?i)\\b((with[ ]+)?timeout[ ]+\\d+([ ]+(seconds|second|s)?))\\b",
+					"match": "(?i)\\b((with[ ]+)?timeout[ ]+)([\\d]+)([ ]+(seconds|second|s))?\\b",
 					"captures": {
-						"1": { "name": "keyword.control.setmailserver1.monit" },
-						"2": { "name": "keyword.control.setmailserver2.monit" },
+						"1": { "name": "keyword.control.setmailserver.monit" },
 						"3": { "name": "constant.numeric.monit" },
-						"4": { "name": "constant.language.monit" }
+						"4": { "name": "support.type.monit" }
 					}
 				},{
 					"match": "(?i)\\b((using[ ]+)?hostname)\\b",
 					"captures": {
 						"1": { "name": "keyword.control.setmailserver.monit" }
 					}
-				},{ "include": "#mailservers" },
-				{ "include": "#comments"
+				},{ "include": "#comments" },
+					{ "include": "#username" },
+					{ "include": "#password" },
+					{ "include": "#ssl" },
+					{ "include": "#sslchecksum" },
+					{ "include": "#sslversion" },
+					{ "include": "#certmd5" },
+					{ "include": "#hosts" 
 				}]
 			},{
-				"begin": "(?i)\\b(set[ ]+mailformat)\\b",
+				"begin": "(?i)\\b(set[ ]+mail-format)\\b",
 				"end": "(?i)\\b(?=(check|set|include))\\b",
 				"captures": {
 					"1": { "name": "keyword.control.setmailformat.monit" }
 				},
 				"patterns": [{
-					"begin": "\\{",
-					"end": "\\}",
+					"begin": "(\\{)",
+					"end": "(\\})",
 					"captures": {
 						"1": { "name": "keyword.control.setmailformat.monit" }
 					},
-					"patterns": [{ "include": "#mailformats" },
-						{ "include": "#comments"
+					"patterns": [{ "include": "#comments" },
+						{ "include": "#constants" },
+						{ "include": "#formatoption"
 					}]
+				},{ "include": "#comments" },
+					{ "include": "#constants"
 				}]
 			},{
 				"begin": "(?i)\\b(set[ ]+httpd)\\b",
@@ -297,45 +313,57 @@
 				"captures": {
 					"1": { "name": "keyword.control.sethttpd.monit" }
 				},
-				"patterns": [{ "include": "#httpds" },
-					{ "include": "#comments"
+				"patterns": [{ "include": "#comments" },
+					{ "include": "#ssl" },
+					{ "include": "#pemfile" },
+					{ "include": "#clientpemfile" },
+					{ "include": "#allowselfcert" },
+					{ "include": "#signature" },
+					{ "include": "#bindaddress" },
+					{ "include": "#allow" },
+					{ "include": "#httpdport" },
+					{ "include": "#httpdsocket" },
+					{ "include": "#noises"
 				}]
+			},{ "include": "#comments"
 			}]
 		},
 		"checks": {
 			"comment": "Monit checks",
 			"patterns": [{
-				"begin": "(?i)\\b(check[ ]+process[ ]+)(\"[^\"]+\"|'[^']+'|[\\w\\-_.\\/:#%]+)\\b",
+				"begin": "(?i)\\b(check[ ]+process[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))\\b",
 				"end": "(?i)\\b(?=(check|set|include))\\b",
 				"captures": {
 					"1": { "name": "keyword.control.checkprocess.monit" },
 					"2": { "name": "constant.character.monit" }
 				},
 				"patterns": [{
-					"match": "(?i)\\b(pidfile[ ]+)(\"\\/[^\"]+\"|'\\/[^']+'|\\/[\\w\\-_.\\/:#%]+)\\b",
+					"match": "(?i)((with[ ]+)?pidfile[ ]+)((\"\\/[^\"]*\")|('\\/[^']*')|(\\/[\\w\\-_.\\/:#%]+))",
 					"captures": {
 						"1": { "name": "keyword.control.checkprocess.monit" },
 						"2": { "name": "constant.character.monit" }
 					}
 				},{
-					"match": "(?i)\\b(path[ ]+)(\"\\/[^\"]+\"|'\\/[^']+'|\\/[\\w\\-_.\\/:#%]+)\\b",
+					"match": "(?i)((with[ ]+)?path[ ]+)((\"\\/[^\"]*\")|('\\/[^']*')|(\\/[\\w\\-_.\\/:#%]+))",
 						"captures": {
 							"1": { "name": "keyword.control.checkprocess.monit" },
 							"2": { "name": "constant.character.monit" }
 						}
 				},{
-					"match": "(?i)\\b(match(ing)?[ ]+)(\"\\/[^\"]+\"|'\\/[^']+'|\\/[\\w\\-_.\\/:#%]+)\\b",
+					"match": "(?i)(match(ing)?[ ]+)((\"\\/[^\"]*\")|('\\/[^']*')|(\\/[\\w\\-_.\\/:#%]+))",
 					"captures": {
 						"1": { "name": "keyword.control.checkprocess.monit" },
 						"2": { "name": "constant.character.monit" }
 					}
 				},{
-					"match": "(?i)\\b(match(ing)?[ ]+)(\"[^\"]+\"|'[^']+'|[\\w\\-_.\\/:#%*?]+)\\b",
+					"match": "(?i)(match(ing)?[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
 						"captures": {
 							"1": { "name": "keyword.control.checkprocess.monit" },
 							"2": { "name": "constant.other.monit" }
 						}
 				},{ "include": "#optprocesses" },
+					{ "include": "#comments" },
+					{ "include": "#noises" },
 					{ "include": "#programs" },
 					{ "include": "#exist" },
 					{ "include": "#pid" },
@@ -358,25 +386,26 @@
 					{ "include": "#group" },
 					{ "include": "#depend" },
 					{ "include": "#resourceprocess" },
-					{ "include": "#useroptions" },
-					{ "include": "#noises" },
-					{ "include": "#comments"
+					{ "include": "#useroption"
 				}]
 			},{
-				"begin": "(?i)\\b(check[ ]+file[ ]+)(\"[^\"]+\"|'[^']+'|[\\w\\-_.\\/:#%]+)\\b",
+				"begin": "(?i)\\b(check[ ]+file[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))\\b",
 				"end": "(?i)\\b(?=(check|set|include))\\b",
 				"captures": {
 					"1": { "name": "keyword.control.checkfile.monit" },
 					"2": { "name": "constant.character.monit" }
 				},
 				"patterns": [{
-					"match": "(?i)\\b(path[ ]+)(\"\\/[^\"]+\"|'\\/[^']+'|\\/[\\w\\-_.\\/:#%]+)\\b",
+					"match": "(?i)\\b((with[ ]+)?path[ ]+)((\"\\/[^\"]*\")|('\\/[^']*')|(\\/[\\w\\-_.\\/:#%]+))",
 					"captures": {
 						"1": { "name": "keyword.control.checkfile.monit" },
 						"2": { "name": "constant.character.monit" }
 					}
 				},{ "include": "#optfiles" },
+					{ "include": "#comments" },
+					{ "include": "#noises" },
 					{ "include": "#programs" },
+                	{ "include": "#alert" },
                 	{ "include": "#exist" },
                 	{ "include": "#timestamp" },
                 	{ "include": "#actionrate" },
@@ -392,24 +421,24 @@
                 	{ "include": "#mode" },
                 	{ "include": "#onreboot" },
                 	{ "include": "#group" },
-                	{ "include": "#depend" },
-					{ "include": "#noises" },
-					{ "include": "#comments"
+                	{ "include": "#depend"
 				}]
 			},{
-				"begin": "(?i)\\b(check[ ]+filesystem[ ]+)(\"[^\"]+\"|'[^']+'|[\\w\\-_.\\/:#%]+)\\b",
+				"begin": "(?i)\\b(check[ ]+filesystem[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))\\b",
 				"end": "(?i)\\b(?=(check|set|include))\\b",
 				"captures": {
 					"1": { "name": "keyword.control.checkfilesystem.monit" },
 					"2": { "name": "constant.character.monit" }
 				},
 				"patterns": [{
-					"match": "(?i)\\b(path[ ]+)(\"\\/[^\"]+\"|'\\/[^']+'|\\/[\\w\\-_.\\/:#%]+)\\b",
+					"match": "(?i)\\b((with[ ]+)?path[ ]+)((\"\\/[^\"]*\")|('\\/[^']*')|(\\/[\\w\\-_.\\/:#%]+))",
 					"captures": {
 						"1": { "name": "keyword.control.checkfilesystem.monit" },
 						"2": { "name": "constant.character.monit" }
 					}
 				},{ "include": "#optfilesystems" },
+					{ "include": "#comments" },
+					{ "include": "#noises" },
 					{ "include": "#programs" },
 					{ "include": "#exist" },
 					{ "include": "#actionrate" },
@@ -427,24 +456,24 @@
 					{ "include": "#read" },
 					{ "include": "#write" },
 					{ "include": "#servicetime" },
-					{ "include": "#fsflag" },
-					{ "include": "#noises" },
-					{ "include": "#comments"
+					{ "include": "#fsflag"
 				}]
 			},{
-				"begin": "(?i)\\b(check[ ]+directory[ ]+)(\"[^\"]+\"|'[^']+'|[\\w\\-_.\\/:#%]+)\\b",
+				"begin": "(?i)\\b(check[ ]+directory[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))\\b",
 				"end": "(?i)\\b(?=(check|set|include))\\b",
 				"captures": {
 					"1": { "name": "keyword.control.checkdirectory.monit" },
 					"2": { "name": "constant.character.monit" }
 				},
 				"patterns": [{
-					"match": "(?i)\\b(path[ ]+)(\"\\/[^\"]+\"|'\\/[^']+'|\\/[\\w\\-_.\\/:#%]+)\\b",
+					"match": "(?i)\\b((with[ ]+)?path[ ]+)((\"\\/[^\"]*\")|('\\/[^']*')|(\\/[\\w\\-_.\\/:#%]+))",
 					"captures": {
 						"1": { "name": "keyword.control.checkdirectory.monit" },
 						"2": { "name": "constant.character.monit" }
 					}
 				},{ "include": "#optdirectorys" },
+					{ "include": "#comments" },
+					{ "include": "#noises" },
 					{ "include": "#programs" },
 					{ "include": "#exist" },
                 	{ "include": "#timestamp" },
@@ -458,24 +487,24 @@
                 	{ "include": "#mode" },
                 	{ "include": "#onreboot" },
                 	{ "include": "#group" },
-                	{ "include": "#depend" },
-					{ "include": "#noises" },
-					{ "include": "#comments"
+                	{ "include": "#depend"
 				}]
 			},{
-				"begin": "(?i)\\b(check[ ]+host[ ]+)(\"[^\"]+\"|'[^']+'|[\\w\\-_.\\/:#%]+)\\b",
+				"begin": "(?i)\\b(check[ ]+host[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))\\b",
 				"end": "(?i)\\b(?=(check|set|include))\\b",
 				"captures": {
 					"1": { "name": "keyword.control.checkhost.monit" },
 					"2": { "name": "constant.character.monit" }
 				},
 				"patterns": [{
-					"match": "(?i)\\b(address[ ]+)(\"\\/[^\"]+\"|'\\/[^']+'|[\\w\\-_.\\/:#%]+)\\b",
+					"match": "(?i)((with[ ]+)?address[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
 					"captures": {
 						"1": { "name": "keyword.control.checkhost.monit" },
 						"2": { "name": "constant.character.monit" }
 					}
 				},{ "include": "#opthosts" },
+					{ "include": "#comments" },
+					{ "include": "#noises" },
 					{ "include": "#programs" },
                 	{ "include": "#connection" },
                 	{ "include": "#connectionurl" },
@@ -486,30 +515,30 @@
                 	{ "include": "#mode" },
                 	{ "include": "#onreboot" },
                 	{ "include": "#group" },
-                	{ "include": "#depend" },
-					{ "include": "#noises" },
-					{ "include": "#comments"
+                	{ "include": "#depend"
 				}]
 			},{
-				"begin": "(?i)\\b(check[ ]+network[ ]+)(\"[^\"]+\"|'[^']+'|[\\w\\-_.\\/:#%]+)\\b",
+				"begin": "(?i)\\b(check[ ]+network[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))\\b",
 				"end": "(?i)\\b(?=(check|set|include))\\b",
 				"captures": {
 					"1": { "name": "keyword.control.checknetwork.monit" },
 					"2": { "name": "constant.character.monit" }
 				},
 				"patterns": [{
-					"match": "(?i)\\b(address[ ]+)(\"\\/[^\"]+\"|'\\/[^']+'|[\\w\\-_.\\/:#%]+)\\b",
+					"match": "(?i)\\b((with[ ]+)?address[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
 					"captures": {
 						"1": { "name": "keyword.control.checknetwork.monit" },
 						"2": { "name": "constant.character.monit" }
 					}
 				},{
-					"match": "(?i)\\b(interface[ ]+)(\"\\/[^\"]+\"|'\\/[^']+'|[\\w\\-_.\\/:#%]+)\\b",
+					"match": "(?i)\\b((with[ ]+)?interface[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
 					"captures": {
 						"1": { "name": "keyword.control.checknetwork.monit" },
 						"2": { "name": "constant.character.monit" }
 					}
 				},{ "include": "#optnetworks" },
+					{ "include": "#comments" },
+					{ "include": "#noises" },
 					{ "include": "#programs" },
 					{ "include": "#linkstatus" },
 					{ "include": "#linkspeed" },
@@ -522,18 +551,18 @@
 					{ "include": "#onreboot" },
 					{ "include": "#alert" },
 					{ "include": "#group" },
-					{ "include": "#depend" },
-					{ "include": "#noises" },
-					{ "include": "#comments"
+					{ "include": "#depend"
 				}]
 			},{
-				"begin": "(?i)\\b(check[ ]+system[ ]+)(\\$HOST|\"[^\"]+\"|'[^']+'|[\\w\\-_.\\/:#%]+)\\b",
+				"begin": "(?i)\\b(check[ ]+system[ ]+)(\\$HOST|(\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))\\b",
 				"end": "(?i)\\b(?=(check|set|include))\\b",
 				"captures": {
 					"1": { "name": "keyword.control.checksystem.monit" },
 					"2": { "name": "constant.character.monit" }
 				},
 				"patterns": [{ "include": "#optsystems" },
+					{ "include": "#comments" },
+					{ "include": "#noises" },					
 					{ "include": "#programs" },
 					{ "include": "#actionrate" },
 					{ "include": "#alert" },
@@ -544,24 +573,24 @@
 					{ "include": "#depend" },
 					{ "include": "#resourcesystem" },
 					{ "include": "#uptime" },
-					{ "include": "#filedescriptorssystem" },
-					{ "include": "#noises" },
-					{ "include": "#comments"
+					{ "include": "#filedescriptorssystem"
 				}]
 			},{
-				"begin": "(?i)\\b(check[ ]+fifo[ ]+)(\"[^\"]+\"|'[^']+'|[\\w\\-_.\\/:#%]+)\\b",
+				"begin": "(?i)\\b(check[ ]+fifo[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))\\b",
 				"end": "(?i)\\b(?=(check|set|include))\\b",
 				"captures": {
 					"1": { "name": "keyword.control.checkfifo.monit" },
 					"2": { "name": "constant.character.monit" }
 				},
 				"patterns": [{
-					"match": "(?i)\\b(path[ ]+)(\"\\/[^\"]+\"|'\\/[^']+'|\\/[\\w\\-_.\\/:#%]+)\\b",
+					"match": "(?i)\\b(path[ ]+)((\"\\/[^\"]*\")|('\\/[^']*')|(\\/[\\w\\-_.\\/:#%]+))",
 					"captures": {
 						"1": { "name": "keyword.control.checkfifo.monit" },
 						"2": { "name": "constant.character.monit" }
 					}
 				},{ "include": "#optfifos" },
+					{ "include": "#comments" },
+					{ "include": "#noises" },
 					{ "include": "#programs" },
 					{ "include": "#exist" },
 					{ "include": "#timestamp" },
@@ -575,30 +604,31 @@
 					{ "include": "#mode" },
 					{ "include": "#onreboot" },
 					{ "include": "#group" },
-					{ "include": "#depend" },
-					{ "include": "#noises" },
-					{ "include": "#comments"
+					{ "include": "#depend"
 				}]
 			},{
-				"begin": "(?i)\\b(check[ ]+program[ ]+)(\"[^\"]+\"|'[^']+'|[\\w\\-_.\\/:#%]+)\\b",
+				"begin": "(?i)\\b(check[ ]+program[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))\\b",
 				"end": "(?i)\\b(?=(check|set|include))\\b",
 				"captures": {
 					"1": { "name": "keyword.control.checkprogram.monit" },
 					"2": { "name": "constant.character.monit" }
 				},
 				"patterns": [{
-					"match": "(?i)\\b(path[ ]+)(\"\\/[^\"]+\"|'\\/[^']+'|\\/[\\w\\-_.\\/:#%]+)\\b",
+					"match": "(?i)\\b((with[ ]+)?path[ ]+)((\"\\/[^\"]*\")|('\\/[^']*')|(\\/[\\w\\-_.\\/:#%]+))",
 					"captures": {
 						"1": { "name": "keyword.control.checkprogram.monit" },
-						"2": { "name": "constant.character.monit" }
+						"3": { "name": "constant.character.monit" }
 					}
 				},{
-					"match": "(?i)\\b(timeout[ ]+)([\\d]+)([ ]+second(s)?)?\\b",
-						"captures": {
-							"1": { "name": "keyword.control.checkprogram.monit" },
-							"2": { "name": "constant.numeric.monit" }
-						}
+					"match": "(?i)\\b((with[ ]+)?timeout[ ]+)([\\d]+)([ ]+(seconds|second|s))?\\b",
+					"captures": {
+						"1": { "name": "keyword.control.checkprogram.monit" },
+						"3": { "name": "constant.numeric.monit" },
+						"4": { "name": "support.type.monit" }
+					}
 				},{ "include": "#optprograms" },
+					{ "include": "#comments" },
+					{ "include": "#noises" },
 					{ "include": "#programs" },
 					{ "include": "#actionrate" },
 					{ "include": "#alert" },
@@ -609,22 +639,18 @@
 					{ "include": "#depend" },
 					{ "include": "#statusvalue" },
 					{ "include": "#programmatch" },
-					{ "include": "#useroptions" },
-					{ "include": "#noises" },
-					{ "include": "#comments"
+					{ "include": "#useroption"
 				}]
+			},{ "include": "#comments"
 			}]
 		},
 		"programs": {
 			"comment": "Monit programs",
 			"patterns": [{
-				"matchx": "(?i)\\b((start|stop|restart)[ ]+(program(s)?[ ]+)?(=[ ]+)?)(\"[^\"]+\"|'[^']+'|\\/[\\w\\-_.\\/:#%]+)\\b",
-				"match": "(?i)\\b(start|stop|restart)([ ]+program(s)?)?([ ]+=[ ]+)?",
+				"match": "(?i)\\b((start|stop|restart)[ ]+(program(s)?[ ]+)?(=[ ]+)?)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
 				"captures": {
-					"1": { "name": "keyword.control.program.monit1" },
-					"2": { "name": "keyword.control.program.monit2" },
-					"3": { "name": "keyword.control.program.monit3" },
-					"4": { "name": "keyword.control.program.monit4" }
+					"1": { "name": "keyword.control.program.monit" },
+					"6": { "name": "constant.character.monit" }
 				}
 			},{
 				"match": "(?i)\\b((uid|gid)[ ]+)([\\d]+)\\b",
@@ -639,16 +665,16 @@
 					"3": { "name": "constant.character.monit" }
 				}
 			},{
-				"match": "(?i)\\b(timeout[ ]+)([\\d]+)([ ]+second(s)?)?\\b",
+				"match": "(?i)\\b((with[ ]+)?timeout[ ]+)([\\d]+)([ ]+(seconds|second|s))?\\b",
 				"captures": {
 					"1": { "name": "keyword.control.program.monit" },
-					"2": { "name": "constant.numeric.monit" },
-					"3": { "name": "keyword.control.program.monit" }
+					"3": { "name": "constant.numeric.monit" },
+					"4": { "name": "support.type.monit" }
 				}
-			},{ "include": "#arguments"
+			},{ "include": "#argument"
 			}]
 		},
-		"arguments": {
+		"argument": {
 			"comment": "Monit argument",
             "patterns": [{
 				"name": "string.quoted.double.argument.monit",
@@ -667,7 +693,7 @@
 				"match": "(\\/[\\w\\-_.\\/:#%]+)"
         	}]
 		},
-		"useroptions": {
+		"useroption": {
 			"comment": "Monit user options",
 			"patterns": [{
 				"match": "(?i)\\b((uid|gid)[ ]+)([\\d]+)\\b",
@@ -683,100 +709,546 @@
 				}
 			}]
 		},
-		"usernames": {
-				"comment": "Monit user names",
-				"patterns": [{
-					"match": "(?i)\\b(username[ ]+)([\\w\\-_.]+(@[\\w\\-_.]*)?)\\b",
-					"captures": {
-						"1": { "name": "keyword.control.useroption.monit" },
-						"2": { "name": "constant.character.monit" }
-					}
-				},{
-					"match": "(?i)\\b(username[ ]+)([\\w]+)\\b",
-					"captures": {
-						"1": { "name": "keyword.control.useroption.monit" },
-						"2": { "name": "constant.character.monit" }
-					}
+		"username": {
+			"comment": "Monit user names",
+			"patterns": [{
+				"match": "(?i)\\b(username[ ]+)([\\w\\-_.]+(@[\\w\\-_.]*)?)\\b",
+				"captures": {
+					"1": { "name": "keyword.control.useroption.monit" },
+					"2": { "name": "constant.character.monit" }
+				}
+			},{
+				"match": "(?i)\\b(username[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
+				"captures": {
+					"1": { "name": "keyword.control.useroption.monit" },
+					"2": { "name": "constant.character.monit" }
+				}
+			}]
+		},
+		"password": {
+			"comment": "Monit password",
+			"patterns": [{
+				"match": "(?i)\\b(password[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
+				"captures": {
+					"1": { "name": "keyword.control.password.monit" },
+					"2": { "name": "constant.character.monit" }
+				}
+			}]
+		},
+		"database": {
+			"comment": "Monit database",
+			"patterns": [{
+				"match": "(?i)\\b(password[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
+				"captures": {
+					"1": { "name": "keyword.control.database.monit" },
+					"2": { "name": "constant.character.monit" }
+				}
+			}]
+		},
+		"hostname": {
+			"comment": "Monit hostname",
+			"patterns": [{
+				"match": "(?i)\\b(hostname[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
+				"captures": {
+					"1": { "name": "keyword.control.hostname.monit" },
+					"2": { "name": "constant.character.monit" }
+				}
 			}]
 		},
 		"connection": {
 			"comment": "Monit connection tests",
 			"patterns": [{
-				"begin": "(?i)\\b(if[ ]+(failed|succeeded))([ ]+host[ ]+(\"[^\"]+\"|'[^']+'|[\\w\\-_.\\/:#%]+))?([ ]+port[ ]+([\\d]+))",
+				"begin": "(?i)\\b(if[ ]+(failed|succeeded)[ ]+host[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))([ ]+port[ ]+)([\\d]+)",
 				"end": "(?i)\\b(?=(then|if|check))\\b",
 				"captures": {
 					"1": { "name": "keyword.control.connection.monit" },
-					"3": { "name": "keyword.control.connection.monit" },
-					"4": { "name": "constant.character.monit" },
-					"5": { "name": "keyword.control.connection.monit" },
-					"6": { "name": "constant.numeric.monit" }
+					"3": { "name": "constant.character.monit" },
+					"7": { "name": "keyword.control.connection.monit" },
+					"8": { "name": "constant.numeric.monit" }
 				},
-				"patterns": [{ "include": "#rates" },
+				"patterns": [{ "include": "#ip" },
+					{ "include": "#type" },
+					{ "include": "#protocol" },
+					{ "include": "#sendexpect" },
+					{ "include": "#urloption" },
+					{ "include": "#connectiontimeout" },
+					{ "include": "#responsetime" },
+					{ "include": "#outgoing" },
+					{ "include": "#retry" },
+					{ "include": "#ssl" },
+					{ "include": "#sslchecksum" },
+					{ "include": "#sslexpire" },
+					{ "include": "#rates" },
 					{ "include": "#comments"
 				}]
-			},{ "include": "#actions" },
-				{ "include": "#comments"
+			},{
+				"begin": "(?i)\\b(if[ ]+(failed|succeeded)[ ]+port[ ]+)([\\d]+)",
+					"end": "(?i)\\b(?=(then|if|check))\\b",
+					"captures": {
+						"1": { "name": "keyword.control.connection.monit" },
+						"3": { "name": "constant.numeric.monit" }
+					},
+					"patterns": [{ "include": "#ip" },
+						{ "include": "#type" },
+						{ "include": "#protocol" },
+						{ "include": "#sendexpect" },
+						{ "include": "#urloption" },
+						{ "include": "#connectiontimeout" },
+						{ "include": "#responsetime" },
+						{ "include": "#outgoing" },
+						{ "include": "#retry" },
+						{ "include": "#ssl" },
+						{ "include": "#sslchecksum" },
+						{ "include": "#sslexpire" },
+						{ "include": "#rates" },
+						{ "include": "#comments"
+					}]
+			},{ "include": "#comments" },
+				{ "include": "#action"
 			}]
 		},
 		"connectionurl": {
 			"comment": "Monit connection url tests",
 			"patterns": [{
-				"begin": "(?i)\\b(if[ ]+(failed|succeeded))([ ]+url[ ]+([\\w]+:\\/\\/[\\w\\-_.]+)(:[\\d]+)?)",
+				"begin": "(?i)\\b(if[ ]+(failed|succeeded)[ ]+url[ ]+)(([\\w]+:\\/\\/[\\w\\-_.]+)(:[\\d]+)?)",
 				"end": "(?i)\\b(?=(then|if|check))\\b",
 				"captures": {
 					"1": { "name": "keyword.control.connectionurl.monit" },
-					"3": { "name": "keyword.control.connectionurl.monit" },
-					"4": { "name": "constant.character.monit" },
-					"5": { "name": "constant.character.monit" }
+					"3": { "name": "constant.character.monit" }
 				},
-				"patterns": [{ "include": "#rates" },
+				"patterns": [{ "include": "#urloption" },
+					{ "include": "#connectiontimeout" },
+					{ "include": "#retry" },
+					{ "include": "#ssl" },
+					{ "include": "#sslchecksum" },
+					{ "include": "#sslexpire" },
+					{ "include": "#rates" },
 					{ "include": "#comments"
 				}]
-			},{ "include": "#actions" },
-				{ "include": "#comments"
+			},{ "include": "#comments" },
+				{ "include": "#action"
 			}]
 		},
 		"connectionunix": {
 			"comment": "Monit connection socket tests",
 			"patterns": [{
-				"begin": "(?i)\\b(if[ ]+(failed|succeeded))([ ]+unix(socket)?[ ]+(\"\\/[^\"]+\"|'\\/[^']+'|\\/[\\w\\-_.\\/:#%]+))",
+				"begin": "(?i)\\b(if[ ]+(failed|succeeded)[ ]+unix(socket)?[ ]+)((\"\\/[^\"]*\")|('\\/[^']*')|(\\/[\\w\\-_.\\/:#%]+))",
 				"end": "(?i)\\b(?=(then|if|check))\\b",
 				"captures": {
 					"1": { "name": "keyword.control.connectionunix.monit" },
-					"3": { "name": "keyword.control.connectionunix.monit" },
-					"5": { "name": "constant.character.monit" }
+					"4": { "name": "constant.character.monit" }
 				},
-				"patterns": [{ "include": "#rates" },
+				"patterns": [{ "include": "#type" },
+					{ "include": "#protocol" },
+					{ "include": "#sendexpect" },
+					{ "include": "#connectiontimeout" },
+					{ "include": "#responsetime" },
+					{ "include": "#retry" },
+					{ "include": "#rates" },
 					{ "include": "#comments"
 				}]
-			},{ "include": "#actions" },
-				{ "include": "#comments"
+			},{ "include": "#comments" },
+				{ "include": "#action"
 			}]
 		},
 		"connectionicmp": {
 			"comment": "Monit connection icmp tests",
 			"patterns": [{
-				"begin": "(?i)\\b(if[ ]+(failed|succeeded))([ ]+icmp)",
+				"begin": "(?i)\\b(if[ ]+(failed|succeeded)[ ]+icmp)\\b",
 				"end": "(?i)\\b(?=(then|if|check))\\b",
 				"captures": {
-					"1": { "name": "keyword.control.connectionicmp.monit" },
-					"3": { "name": "keyword.control.connectionicmp.monit" }
+					"1": { "name": "keyword.control.connectionicmp.monit" }
 				},
-				"patterns": [{ "include": "#rates" },
+				"patterns": [{ "include": "#icmpcount" },
+					{ "include": "#icmpsize" },
+					{ "include": "#icmptimeout" },
+					{ "include": "#icmpoutgoing" },
+					{ "include": "#responsetime" },
+					{ "include": "#rates" },
 					{ "include": "#comments"
 				}]
 			},{
-				"begin": "(?i)\\b(if[ ]+(failed|succeeded))([ ]+ping(4|6)?)",
+				"begin": "(?i)\\b(if[ ]+(failed|succeeded)[ ]+ping(4|6)?)\\b",
 				"end": "(?i)\\b(?=(then|if|check))\\b",
 				"captures": {
-					"1": { "name": "keyword.control.connectionicmp.monit" },
-					"3": { "name": "keyword.control.connectionicmp.monit" }
+					"1": { "name": "keyword.control.connectionicmp.monit" }
 				},
-				"patterns": [{ "include": "#rates" },
+				"patterns": [{ "include": "#icmpcount" },
+					{ "include": "#icmpsize" },
+					{ "include": "#icmptimeout" },
+					{ "include": "#icmpoutgoing" },
+					{ "include": "#responsetime" },
+					{ "include": "#rates" },
 					{ "include": "#comments"
 				}]
-			},{ "include": "#actions" },
-				{ "include": "#comments"
+			},{ "include": "#comments" },
+				{ "include": "#action"
+			}]
+		},
+		"host": {
+			"comment": "Monit host",
+			"patterns": [{
+				"match": "(?i)\\b(host[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
+				"captures": {
+					"1": { "name": "keyword.control.host.monit" },
+					"2": { "name": "constant.character.monit" }
+				}
+			}]
+		},
+		"port": {
+			"comment": "Monit port",
+			"patterns": [{
+				"match": "(?i)\\b(port[ ]+)([\\d]]+)",
+				"captures": {
+					"1": { "name": "keyword.control.port.monit" },
+					"2": { "name": "constant.numeric.monit" }
+				}
+			}]
+		},
+		"unixsocket": {
+			"comment": "Monit unixsocket",
+			"patterns": [{
+				"match": "(?i)\\b(unixsocket[ ]+)([\"]\\/[^\"]+[\"]|[']\\/[^']+[']|\\/[\\w\\-_./*?]+)",
+				"captures": {
+					"1": { "name": "keyword.control.unixsocket.monit" },
+					"2": { "name": "constant.character.monit" }
+				}
+			}]
+		},
+		"ip": {
+			"comment": "Monit ip",
+			"patterns": [{
+				"match": "(?i)\\b(ipv4|ipv6)",
+				"captures": {
+					"1": { "name": "keyword.control.ip.monit" }
+				}
+			}]
+		},
+		"type": {
+			"comment": "Monit type",
+			"patterns": [{
+				"match": "(?i)\\b(type[ ]+(tcp|tcpssl|udp))",
+				"captures": {
+					"1": { "name": "keyword.control.type.monit" }
+				}
+			}]
+		},
+		"outgoing": {
+			"comment": "Monit outgoing",
+			"patterns": [{
+				"match": "(?i)\\b(address[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
+				"captures": {
+					"1": { "name": "keyword.control.outgoing.monit" },
+					"2": { "name": "constant.character.monit" }
+				}
+			}]
+		},
+		"protocol": {
+			"comment": "Monit protocol",
+			"patterns": [{
+				"begin": "(?i)\\b(proto(col)?[ ]+apache-status)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.protocol.monit" }
+				},
+				"patterns": [{ "include": "#comments"
+				},{
+					"name": "keyword.control.protocol.monit",
+					"match": "(?i)\\b(path[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))"
+				},{
+					"name": "keyword.control.protocol.monit",
+					"match": "(?i)\\b(loglimit|closelimit|dnslimit|keepalivelimit|replylimit|requestlimit|startlimit|waitlimit|gracefullimit|cleanuplimit)"
+				},{
+					"name": "constant.numeric.monit",
+					"match": "(?i)([\\d]+)([ ]?(percent|%))?"
+				},{ "include": "#username" },
+					{ "include": "#password" },
+					{ "include": "#operators"
+				}]
+			},{
+				"match": "(?i)\\b(proto(col)?[ ]+(clamav|defaut|dns|dwp|fail2ban|ftp|gps))",
+				"captures": {
+					"1": { "name": "keyword.control.protocol.monit" }
+				}
+			},{
+				"begin": "(?i)\\b(proto(col)?[ ]+(https|http))",
+				"end": "(?i)\\b(?=(then|if))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.protocol.monit" }
+				},
+				"patterns": [{ "include": "#comments" },
+					{ "include": "#username" },
+					{ "include": "#password" },
+					{ "include": "#request" },
+					{ "include": "#status"
+				},{
+					"match": "(?i)\\b(checksum[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
+					"captures": {
+						"1": { "name": "keyword.control.protocol.monit" },
+						"2": { "name": "constant.character.monit" }
+					}
+				},{
+					"match": "(?i)\\b(method[ ]+(get|head))",
+					"captures": {
+						"1": { "name": "keyword.control.protocol.monit" }
+					}
+				},{
+					"match": "(?i)\\b(hostheader[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
+					"captures": {
+						"1": { "name": "keyword.control.protocol.monit" },
+						"2": { "name": "constant.character.monit" }
+					}
+				},{					 
+					"begin": "(\\[)",
+					"end": "(\\])",
+					"captures": {
+						"1": { "name": "keyword.control.protocol.monit" }
+					},
+					"patterns": [{ "include": "#comments"
+					},{
+						"match": "(?i)\\b((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
+							"captures": {
+								"1": { "name": "constant.character.monit" }
+							}		
+					}]
+				}]
+			},{
+				"match": "(?i)\\b(proto(col)?[ ]+(imaps|imap|ldap2|ldap3|lmtp|memcache|mongodb))",
+				"captures": {
+					"1": { "name": "keyword.control.protocol.monit" }
+				}
+			},{
+				"begin": "(?i)\\b(proto(col)?[ ]+mqtt)",
+				"end": "(?i)\\b(?=(then|if))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.protocol.monit" }
+				},
+				"patterns": [{ "include": "#comments" },
+					{ "include": "#username" },
+					{ "include": "#password"
+				}]
+			},{
+				"begin": "(?i)\\b(proto(col)?[ ]+(mysqls|mysql))",
+				"end": "(?i)\\b(?=(then|if))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.protocol.monit" }
+				},
+				"patterns": [{ "include": "#comments" },
+					{ "include": "#username" },
+					{ "include": "#password"
+				},{
+					"name": "keyword.control.protocol.monit",
+					"match": "(?i)\\b(rsakey[ ]+checksum([ ]+(md5|sha1))?([ ]+(equal|eq|==|=))?)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
+					"captures": {
+						"1": { "name": "keyword.control.protocol.monit" },
+						"4": { "name": "keyword.operator.monit" },
+						"5": { "name": "constant.character.monit" }
+					}
+				}]
+			},{
+				"match": "(?i)\\b(proto(col)?[ ]+(nntp|ntp3))",
+				"captures": {
+					"1": { "name": "keyword.control.protocol.monit" }
+				}
+			},{
+				"begin": "(?i)\\b(proto(col)?[ ]+pgsql)",
+				"end": "(?i)\\b(?=(then|if))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.protocol.monit" }
+				},
+				"patterns": [{ "include": "#comments" },
+					{ "include": "#username" },
+					{ "include": "#password" },
+					{ "include": "#database"
+				}]
+			},{
+				"match": "(?i)\\b(proto(col)?[ ]+(pops|pop|postfix-policy))",
+				"captures": {
+					"1": { "name": "keyword.control.protocol.monit" }
+				}
+			},{
+				"match": "(?i)\\b(proto(col)?[ ]+radius)",
+				"captures": {
+					"1": { "name": "keyword.control.protocol.monit" }
+				},
+				"patterns": [{ "include": "#comments"
+				},{
+					"name": "keyword.control.protocol.monit",
+					"match": "(?i)\\b(secret[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
+					"captures": {
+						"1": { "name": "keyword.control.protocol.monit" },
+						"2": { "name": "constant.character.monit" }
+					}
+				}]
+			},{
+				"match": "(?i)\\b(proto(col)?[ ]+(rdate|redis|rsync|sieve))",
+				"captures": {
+					"1": { "name": "keyword.control.protocol.monit" }
+				}
+			},{
+				"begin": "(?i)\\b(proto(col)?[ ]+sip)",
+				"end": "(?i)\\b(?=(then|if))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.protocol.monit" }
+				},
+				"patterns": [{ "include": "#comments"
+				},{
+					"name": "keyword.control.protocol.monit",
+					"match": "(?i)\\b(target[ ]+)([\\w\\-_.]+(@[\\w\\-_.]*)?)",
+					"captures": {
+						"1": { "name": "keyword.control.protocol.monit" },
+						"2": { "name": "constant.character.monit" }
+					}
+				},{
+					"name": "keyword.control.protocol.monit",
+					"match": "(?i)\\b(target[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
+					"captures": {
+						"1": { "name": "keyword.control.protocol.monit" },
+						"2": { "name": "constant.character.monit" }
+					}
+				},{
+					"name": "keyword.control.protocol.monit",
+					"match": "(?i)\\b(maxforward[ ]+)([\\d]+)",
+					"captures": {
+						"1": { "name": "keyword.control.protocol.monit" },
+						"2": { "name": "constant.numeric.monit" }
+					}
+				}]
+			},{
+				"begin": "(?i)\\b(proto(col)?[ ]+(smtps|smtp))",
+				"end": "(?i)\\b(?=(then|if))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.protocol.monit" }
+				},
+				"patterns": [{ "include": "#comments" },
+					{ "include": "#username" },
+					{ "include": "#password"
+				}]
+			},{
+				"match": "(?i)\\b(proto(col)?[ ]+(spamassassin|ssh|tns))",
+				"captures": {
+					"1": { "name": "keyword.control.protocol.monit" }
+				}
+			},{
+				"begin": "(?i)\\b(proto(col)?[ ]+websocket)",
+				"end": "(?i)\\b(?=(then|if))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.protocol.monit" }
+				},
+				"patterns": [{ "include": "#comments" 
+				},{
+					"name": "keyword.control.protocol.monit",
+					"match": "(?i)\\b(origin[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
+					"captures": {
+						"1": { "name": "keyword.control.protocol.monit" },
+						"2": { "name": "constant.character.monit" }
+					}
+				},{
+					"name": "keyword.control.protocol.monit",
+					"match": "(?i)\\b(request[ ]+)((\"\\/[^\"]*\")|('\\/[^']*')|(\\/[\\w\\-_.\\/:#%]+))",
+					"captures": {
+						"1": { "name": "keyword.control.protocol.monit" },
+						"2": { "name": "constant.character.monit" }
+					}
+				},{
+					"name": "keyword.control.protocol.monit",
+					"match": "(?i)\\b(host[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
+					"captures": {
+						"1": { "name": "keyword.control.protocol.monit" },
+						"2": { "name": "constant.character.monit" }
+					}
+				},{
+					"name": "keyword.control.protocol.monit",
+					"match": "(?i)\\b(version[ ]+)([\\d]+)",
+					"captures": {
+						"1": { "name": "keyword.control.protocol.monit" },
+						"2": { "name": "constant.numeric.monit" }
+					}
+				}]
+			}]
+		},
+		"sendexpect": {
+			"comment": "Monit send expect",
+			"patterns": [{
+				"match": "(?i)\\b(send[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
+				"captures": {
+					"1": { "name": "keyword.control.sendexpect.monit" },
+					"2": { "name": "constant.character.monit" }
+				}
+			},{
+				"match": "(?i)\\b(expect[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
+				"captures": {
+					"1": { "name": "keyword.control.sendexpect.monit" },
+					"2": { "name": "constant.character.monit" }
+				}
+			}]
+		},
+		"websocket": {
+			"comment": "Monit web socket",
+			"patterns": [{
+				"match": "(?i)\\b(origin[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
+				"captures": {
+					"1": { "name": "keyword.control.websocket.monit" },
+					"2": { "name": "constant.character.monit" }
+				}
+			},{
+				"match": "(?i)\\b(request[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.websocket.monit" },
+					"2": { "name": "constant.character.monit" }
+				}
+			},{
+				"match": "(?i)\\b(host[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
+				"captures": {
+					"1": { "name": "keyword.control.websocket.monit" },
+					"2": { "name": "constant.character.monit" }
+				}
+			},{
+				"match": "(?i)\\b(version[ ]+)([\\d]+)",
+				"captures": {
+					"1": { "name": "keyword.control.websocket.monit" },
+					"2": { "name": "constant.numeric.monit" }
+				}
+			}]
+		},
+		"status": {
+			"comment": "Monit status",
+			"patterns": [{
+				"begin": "(?i)\\b(status)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.status.monit" }
+				},
+				"patterns": [{
+					"name": "constant.numeric.monit",
+					"match": "(?i)\\b([\\d]+)\\b"
+				},{ "include": "#operators" },
+					{ "include": "#comments"
+				}]
+			},{ "include": "#comments"
+			}]
+		},
+		"method": {
+			"comment": "Monit method",
+			"patterns": [{
+				"name": "keyword.control.method.monit",
+				"match": "(?i)\\b(method[ ]+(get|head))"
+			}]
+		},
+		"request": {
+			"comment": "Monit request",
+			"patterns": [{
+				"match": "(?i)\\b((and[ ]+)?request[ ]+)((\"\\/[^\"]*\")|('\\/[^']*')|(\\/[\\w\\-_.\\/:#%]+))",
+					"captures": {
+						"1": { "name": "keyword.control.request.monit" },
+						"3": { "name": "constant.character.monit" }
+					}
+			},{
+				"match": "(?i)\\b((and[ ]+)?request[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
+				"captures": {
+					"1": { "name": "keyword.control.request.monit" },
+					"3": { "name": "constant.character.monit" }
+				}
 			}]
 		},
 		"exist": {
@@ -799,8 +1271,8 @@
 				"patterns": [{ "include": "#rates" },
 					{ "include": "#comments"
 				}]
-			},{ "include": "#actions" },
-				{ "include": "#comments"
+			},{ "include": "#comments" },
+				{ "include": "#action"
 			}]
 		},
 		"pid": {
@@ -814,8 +1286,8 @@
 				"patterns": [{ "include": "#rates" },
 					{ "include": "#comments"
 				}]
-			},{ "include": "#actions" },
-				{ "include": "#comments"
+			},{ "include": "#comments" },
+				{ "include": "#action"
 			}]
 		},
 		"ppid": {
@@ -829,8 +1301,8 @@
 				"patterns": [{ "include": "#rates" },
 					{ "include": "#comments"
 				}]
-			},{ "include": "#actions" },
-				{ "include": "#comments"
+			},{ "include": "#comments" },
+				{ "include": "#action"
 			}]
 		},
 		"uptime": {
@@ -849,8 +1321,151 @@
 					{ "include": "#rates" },
 					{ "include": "#comments"
 				}]
-			},{ "include": "#actions" },
-				{ "include": "#comments"
+			},{ "include": "#comments" },
+				{ "include": "#action"
+			}]
+		},
+		"responsetime": {
+			"comment": "Monit response",
+			"patterns": [{
+				"begin": "(?i)\\b((with[ ]+)responsetime[ ]+)",
+				"end": "(?i)\\b(?=(milliseconds|millisecond|ms))\\b",
+				"beginCaptures": {
+					"1": { "name": "keyword.control.responsetime.monit" }
+				},
+				"endCaptures": {
+					"1": { "name": "support.type.monit" }
+				},
+				"patterns": [{
+					"name": "constant.numeric.monit",
+					"match": "(?i)\\b([\\d]+)\\b"
+				},{ "include": "#operators" },
+					{ "include": "#seconds"
+				}]
+			},{
+				"begin": "(?i)\\b((with[ ]+)responsetime[ ]+)",
+				"end": "(?i)\\b(?=(seconds|second|s))\\b",
+				"beginCaptures": {
+					"1": { "name": "keyword.control.responsetime.monit" }
+				},
+				"endCaptures": {
+					"1": { "name": "support.type.monit" }
+				},
+				"patterns": [{
+					"name": "constant.numeric.monit",
+					"match": "(?i)\\b([\\d]+)\\b"
+				},{ "include": "#operators" },
+					{ "include": "#seconds"
+				}]
+			},{ "include": "#comments" },
+				{ "include": "#noises"
+			}]
+		},
+		"icmpcount": {
+			"comment": "Monit icmp count",
+			"patterns": [{
+				"match": "(?i)\\b(count[ ]+)([\\d]+)\\b",
+				"captures": {
+					"1": { "name": "keyword.control.icmpcount.monit" },
+					"2": { "name": "constant.numeric.monit" }
+				}
+			},{ "include": "#comments"
+			}]
+		},
+		"icmpsize": {
+			"comment": "Monit icmp size",
+			"patterns": [{
+				"match": "(?i)\\b(size[ ]+)([\\d]+)\\b",
+				"captures": {
+					"1": { "name": "keyword.control.icmpsize.monit" },
+					"2": { "name": "constant.numeric.monit" }
+				}
+			},{ "include": "#comments"
+			}]
+		},
+		"icmptimeout": {
+			"comment": "Monit icmp timeout",
+			"patterns": [{
+				"begin": "(?i)\\b(timeout[ ]+)",
+				"end": "(?i)\\b(?=(if|then))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.icmptimeout.monit" }
+				},
+				"patterns": [{
+					"name": "constant.numeric.monit",
+					"match": "(?i)\\b([\\d]+)\\b"
+				},{ "include": "#seconds" },
+					{ "include": "#comments"
+				}]
+			},{ "include": "#comments"
+			}]
+		},
+		"icmpoutgoing": {
+			"comment": "Monit icmp outgoing",
+			"patterns": [{
+				"begin": "(?i)\\b(address[ ]+)",
+				"end": "(?i)\\b(?=(if|then))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.icmpoutgoing.monit" }
+				},
+				"patterns": [{ "include": "#strings" },
+					{ "include": "#comments"
+				}]
+			},{ "include": "#comments"
+			}]
+		},
+		"stoptimeout": {
+			"comment": "Monit stop timeout",
+			"patterns": [{ "include": "#timeouts"
+			}]
+		},
+		"starttimeout": {
+			"comment": "Monit start timeout",
+			"patterns": [{ "include": "#timeouts"
+			}]
+		},
+		"restarttimeout": {
+			"comment": "Monit restart timeout",
+			"patterns": [{ "include": "#timeouts"
+			}]
+		},
+		"programtimeout": {
+			"comment": "Monit program timeout",
+			"patterns": [{ "include": "#timeouts"
+			}]
+		},
+		"nettimeout": {
+			"comment": "Monit net timeout",
+			"patterns": [{ "include": "#timeouts"
+			}]
+		},
+		"connectiontimeout": {
+			"comment": "Monit connection timeout",
+			"patterns": [{ "include": "#timeouts"
+			}]
+		},
+		"timeouts": {
+			"comment": "Monit timeout",
+			"patterns": [{
+				"match": "(?i)\\b((with[ ]+)?timeout[ ]+)([\\d]+)([ ]+(seconds|second|s))?\\b",
+				"captures": {
+					"1": { "name": "keyword.control.timeout.monit" },
+					"3": { "name": "constant.numeric.monit" },
+					"4": { "name": "support.type.monit" }
+				}	
+			}]
+		},
+		"retry": {
+			"comment": "Monit retry",
+			"patterns": [{
+				"begin": "(?i)\\b(retry[ ]+)([\\d]+)",
+				"end": "(?i)\\b(?=(if|then))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.retry.monit" },
+					"2": { "name": "constant.numeric.monit" }
+				},
+				"patterns": [{ "include": "#comments"
+				}]
 			}]
 		},
 		"actionrate": {
@@ -872,42 +1487,289 @@
 			},{
 				"name": "keyword.control.actionrate.monit",
 				"match": "(?i)\\b(timeout)\\b"
-			},{ "include": "#actions" },
+			},{ "include": "#action" },
 				{ "include": "#comments"
+			}]
+		},
+		"urloption": {
+			"comment": "Monit url option",
+			"patterns": [{
+				"begin": "(?i)\\b(content[ ]+)",
+				"end": "(?i)\\b(?=(if|then))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.urloption.monit" }
+				},
+				"patterns": [{ "include": "#urloperators" },
+					{ "include": "#strings" },
+					{ "include": "#comments"
+				}]
 			}]
 		},
 		"urloperators": {
 			"comment": "Monit url operators",
 			"patterns": [{
-				"name": "keyword.control.operator.monit",
+				"name": "keyword.operator.monit",
 				"match": "(?i)(equal|eq|==|=)"
 			},{
-				"name": "keyword.control.operator.monit",
+				"name": "keyword.operator.monit",
 				"match": "(?i)(notequal|ne|!=)"
 			}]
 		},
-		"group":{
+		"alert": {
+			"comment": "Monit alert",
+			"patterns": [{
+				"begin": "(?i)(alert[ ]+)([\\w\\-_.]+(@[\\w\\-_.]*)?)([ ]+not)?",
+				"end": "(?i)\\b(?=(if|then|group|depend(s)?|check|set|include))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.alert.monit1" },
+					"2": { "name": "constant.character.monit" }
+				},
+				"patterns": [{
+					"begin": "(\\{)",
+					"end": "(\\})",
+					"captures": {
+						"1": { "name": "keyword.control.alert.monit2" }
+					},
+					"patterns": [{ "include": "#eventoption" },
+						{ "include": "#comments"
+					}]
+				},{ "include": "#comments" },
+					{ "include": "#noises" },
+					{ "include": "#mails" },
+					{ "include": "#formats" },
+					{ "include": "#reminder"
+				}]
+			},{
+				"begin": "(?i)((noalert|alert)[ ]+)([\\w\\-_.]+(@[\\w\\-_.]*)?)",
+				"end": "(?i)\\b(?=(if|then|group|depend(s)?|check|set|include))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.alert.monit3" },
+					"3": { "name": "constant.character.monit" }
+				},
+				"patterns": [{ "include": "#comments" },
+					{ "include": "#noises" },
+					{ "include": "#mails" },
+					{ "include": "#formats" },
+					{ "include": "#reminder"
+				}]
+			}]
+		},
+		"eventoption": {
+			"comment": "Monit event options",
+			"patterns": [{
+				"name": "support.constant.monit",
+				"match": "(?i)(action)[,]?"
+			},{
+				"name": "support.constant.monit",
+				"match": "(?i)(bytein)[,]?"
+			},{
+				"name": "support.constant.monit",
+				"match": "(?i)(byteout)[,]?"
+			},{
+				"name": "support.constant.monit",
+				"match": "(?i)(checksum)[,]?"
+			},{
+				"name": "support.constant.monit",
+				"match": "(?i)(connection)[,]?"
+			},{
+				"name": "support.constant.monit",
+				"match": "(?i)(content)[,]?"
+			},{
+				"name": "support.constant.monit",
+				"match": "(?i)(data)[,]?"
+			},{
+				"name": "support.constant.monit",
+				"match": "(?i)(exec)[,]?"
+			},{
+				"name": "support.constant.monit",
+				"match": "(?i)(exist)[,]?"
+			},{
+				"name": "support.constant.monit",
+				"match": "(?i)(fsflag)[,]?"
+			},{
+				"name": "support.constant.monit",
+				"match": "(?i)(gid)[,]?"
+			},{
+				"name": "support.constant.monit",
+				"match": "(?i)(icmp)[,]?"
+			},{
+				"name": "support.constant.monit",
+				"match": "(?i)(instance)[,]?"
+			},{
+				"name": "support.constant.monit",
+				"match": "(?i)(invalid)[,]?"
+			},{
+				"name": "support.constant.monit",
+				"match": "(?i)(link)[,]?"
+			},{
+				"name": "support.constant.monit",
+				"match": "(?i)(nonexist)[,]?"
+			},{
+				"name": "support.constant.monit",
+				"match": "(?i)(packetin)[,]?"
+			},{
+				"name": "support.constant.monit",
+				"match": "(?i)(packetout)[,]?"
+			},{
+				"name": "support.constant.monit",
+				"match": "(?i)(permission)[,]?"
+			},{
+				"name": "support.constant.monit",
+				"match": "(?i)(pid)[,]?"
+			},{
+				"name": "support.constant.monit",
+				"match": "(?i)(ppid)[,]?"
+			},{
+				"name": "support.constant.monit",
+				"match": "(?i)(resource)[,]?"
+			},{
+				"name": "support.constant.monit",
+				"match": "(?i)(saturation)[,]?"
+			},{
+				"name": "support.constant.monit",
+				"match": "(?i)(size)[,]?"
+			},{
+				"name": "support.constant.monit",
+				"match": "(?i)(speed)[,]?"
+			},{
+				"name": "support.constant.monit",
+				"match": "(?i)(status)[,]?"
+			},{
+				"name": "support.constant.monit",
+				"match": "(?i)(timeout)[,]?"
+			},{
+				"name": "support.constant.monit",
+				"match": "(?i)(timestamp)[,]?"
+			},{
+				"name": "support.constant.monit",
+				"match": "(?i)(uid)[,]?"
+			},{
+				"name": "support.constant.monit",
+				"match": "(?i)(uptime)[,]?"
+			}]
+		},
+		"formats": {
+			"comment": "Monit mail formats",
+			"begin": "(?i)(mail-format)",
+			"end": "(?i)\\b(?=(if|then|group|depend(s)?|check|set|include))\\b",
+			"captures": {
+				"1": { "name": "keyword.control.format.monit" }
+			},
+			"patterns": [{
+				"begin": "(\\{)",
+				"end": "(\\})",
+				"captures": {
+					"1": { "name": "keyword.control.format.monit" }
+				},
+				"patterns": [{ "include": "#formatoption" },
+					{ "include": "#comments"
+				}]
+			}]
+		},
+		"formatoption": {
+			"comment": "Monit mail format options",
+			"patterns": [{
+				"match": "(?i)\\b(from:[ ]+)",
+				"captures": {
+					"1": { "name": "keyword.control.formatoption.monit" }
+				}
+			},{
+				"match": "(?i)\\b(reply-to:[ ]+)",
+				"captures": {
+					"1": { "name": "keyword.control.formatoption.monit" }
+				}
+			},{
+				"match": "(?i)\\b(subject:[ ]+)",
+				"captures": {
+					"1": { "name": "keyword.control.formatoption.monit" }
+				}
+			},{
+				"match": "(?i)\\b(message:[ ]+)",
+				"captures": {
+					"1": { "name": "keyword.control.formatoption.monit" }
+				}
+			},{ "include": "#constants"
+			},{	
+				"match": "(?i)\\b([\\w\\-_.\\/:#%!\"$%&/()=?*+'#<>,;: \\[\\]]+)",
+				"captures": {
+					"1": { "name": "constant.character.monit" }
+				}
+			}]
+		},
+		"every": {
+			"comment": "Monit every",
+			"patterns": [{
+				"match": "(?i)\\b((not[ ]+)?every[ ]+)(['\"][\\s]?[0-9,*-]+[\\s][0-9,*-]+[\\s][0-9,*-]+[\\s][0-9,*-]+[\\s][0-9,*-]+[\\s]?['\"])",
+				"captures": {
+					"1": { "name": "keyword.control.every.monit" },
+					"2": { "name": "constant.character.monit" }
+				}
+			},{
+				"match": "(?i)\\b(every[ ]+)([\\d]+[ ]+)(cycle(s)?)",
+				"captures": {
+					"1": { "name": "keyword.control.every.monit" },
+					"2": { "name": "constant.numeric.monit" },
+					"3": { "name": "keyword.control.every.monit" }
+				}
+			}]
+		},
+		"mode": {
+			"comment": "Monit mode",
+			"patterns": [{
+				"match": "(?i)\\b(mode+[ ]+(active|passive|manual))",
+				"captures": {
+					"1": { "name": "keyword.control.mode.monit" },
+					"2": { "name": "constant.character.monit" }
+				}
+			}]
+		},
+		"onreboot": {
+			"comment": "Monit on reboot",
+			"patterns": [{
+				"match": "(?i)\\b(onreboot+[ ]+(start|nostart|laststate))",
+				"captures": {
+					"1": { "name": "keyword.control.onreboot.monit" },
+					"2": { "name": "constant.character.monit" }
+				}
+			}]
+		},
+		"group": {
 			"comment": "Monit group",
 			"patterns": [{
-				"begin": "(?i)\\b(group[ ]+)(\"[^\"]+\"|'[^']+'|[\\w\\-_.\\/:#%]+)",
-				"end": "(?i)\\b(?=(if|check|group|depend(s)?))\\b",
+				"begin": "(?i)\\b(group[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
+				"end": "(?i)\\b(?=(if|then|group|depend(s)?|check|set|include))\\b",
 				"captures": {
 					"1": { "name": "keyword.control.group.monit" },
 					"2": { "name": "constant.character.monit" }
-				}
-			}]			
+				},
+				"patterns": [{ "include": "#comments"
+				}]
+			}]
+		},
+		"hostgroups": {
+			"comment": "Monit host groups",
+			"patterns": [{
+				"begin": "\\b(\\[)",
+				"end": "\\b(\\])\\b",
+				"captures": {
+					"1": { "name": "keyword.control.hostgroup.monit" }
+				},
+				"patterns": [{ "include": "#strings" },
+					{ "include": "#comments"
+				}]
+			}]
 		},
 		"depend": {
 			"comment": "Monit depends",
 			"patterns": [{
 				"begin": "(?i)\\b(depend(s)?)([ ]+on)?",
-				"end": "(?i)\\b(?=(if|check|group|depend(s)?))\\b",
+				"end": "(?i)\\b(?=(if|then|group|depend(s)?|check|set|include))\\b",
 				"captures": {
 					"1": { "name": "keyword.control.depend.monit" },
 					"3": { "name": "keyword.control.depend.monit" }
 				},
-				"patterns": [{ "include": "#dependant" },
-					{ "include": "#comments"
+				"patterns": [{ "include": "#comments" },
+					{ "include": "#dependant"
 				}]
 			}]
 		},
@@ -915,7 +1777,7 @@
 			"comment": "Monit dependant",
 			"patterns": [{
 				"name": "constant.character.monit",
-				"match": "(\"[^\"]+\"|'[^']+'|[\\w\\-_.\\/:#%]+)([, ]?)"
+				"match": "((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))([, ]?)"
 			}]
 		},
 		"statusvalue": {
@@ -942,7 +1804,7 @@
 				"patterns": [{ "include": "#rates" },
 					{ "include": "#comments"
 				}]
-			},{ "include": "#actions" },
+			},{ "include": "#action" },
 				{ "include": "#comments"
 			}]
 		},
@@ -1077,7 +1939,7 @@
 					{ "include": "#rates" },
 					{ "include": "#comments"
 				}]
-			},{ "include": "#actions" },
+			},{ "include": "#action" },
 				{ "include": "#comments"
 			}]
 		},
@@ -1254,14 +2116,40 @@
 					{ "include": "#rates" },
 					{ "include": "#comments"
 				}]
-			},{ "include": "#actions" },
+			},{ "include": "#action" },
 				{ "include": "#comments"
+			}]
+		},
+		"value": {
+			"comment": "Monit values",
+			"patterns": [{
+				"name": "constant.numeric.monit",
+				"match": "[\\d]+([.][\\d]+)?"
+			},{
+				"name": "constant.numeric.monit",
+				"match": "[\\d]+"
+			}]
+		},
+		"timestamptype": {
+			"comment": "Monit timestamps",
+			"patterns": [{
+				"name": "variable.language.atime.monit",
+				"match": "(?i)\\b(atime|access time(stamp)?)"
+			},{
+				"name": "variable.language.ctime.monit",
+				"match": "(?i)\\b(ctime|change time(stamp)?)"
+			},{
+				"name": "variable.language.mtime.monit",
+				"match": "(?i)\\b(mtime|modification time(stamp)?|modify time(stamp)?)"
+			},{
+				"name": "variable.language.time.monit",
+				"match": "(?i)\\b(time(stamp)?)"
 			}]
 		},
 		"timestamp": {
 			"comment": "Monit timestamp tests",
 			"patterns": [{
-				"begin": "(?i)\\b(if[ ]+(atime|ctime|mtime|time(stamp)?))",
+				"begin": "(?i)\\b(if[ ]+(atime|access time(stamp)?|ctime|change time(stamp)?|mtime|modification time(stamp)?|modify time(stamp)?|time(stamp)?))",
 				"end": "(?i)\\b(?=(then|if|check))\\b",
 				"captures": {
 					"1": { "name": "keyword.control.timestamp.monit" }
@@ -1269,677 +2157,45 @@
 				"patterns": [{
 					"name": "constant.numeric.monit",
 					"match": "(?i)([\\d]+)"
-				},{ "include": "#operators" },
-					{ "include": "#times" },
-					{ "include": "#rates" },
-					{ "include": "#comments"
+				},{ "include": "#comments" },
+					{ "include": "#operators" },
+					{ "include": "#rates"
 				}]
 			},{
-				"begin": "(?i)\\b(if[ ]+changed[ ]+(atime|ctime|mtime|time(stamp)?))",
+				"begin": "(?i)\\b(if[ ]+changed[ ]+(atime|access time(stamp)?|ctime|change time(stamp)?|mtime|modification time(stamp)?|modify time(stamp)?|time(stamp)?))",
 				"end": "(?i)\\b(?=(then|if|check))\\b",
 				"captures": {
 					"1": { "name": "keyword.control.timestamp.monit" }
 				},
-				"patterns": [{ "include": "#rates" },
-					{ "include": "#comments"
+				"patterns": [{ "include": "#comments" },
+					{ "include": "#rates"
 				}]
-			},{ "include": "#actions" },
-				{ "include": "#comments"
-			}]
-		},
-		"rates": {
-			"comment": "Monit rate",
-			"patterns": [{
-				"match": "(?i)\\b(for[ ]+)?([\\d]+)([ ]+time(s)?[ ]+with(in)?)?([ ]+[\\d]+)([ ]+cycle(s)?)\\b",
-				"captures": {
-					"1": { "name": "keyword.control.repeat.monit" },
-					"2": { "name": "constant.numeric.monit" },
-					"3": { "name": "keyword.control.repeat.monit" },
-					"6": { "name": "constant.numeric.monit" },
-					"7": { "name": "keyword.control.repeat.monit" }
-				}
-			},{
-				"match": "(?i)\\b(for[ ]+)?([\\d]+)([ ]+cycle(s)?)\\b",
-				"captures": {
-					"1": { "name": "keyword.control.repeat.monit" },
-					"2": { "name": "constant.numeric.monit" },
-					"3": { "name": "keyword.control.repeat.monit" }
-				}
-			}]
-		},
-		"checksum": {
-			"comment": "Monit checksum tests",
-			"patterns": [{
-				"begin": "(?i)\\b(if[ ]+failed([ ]+(md5|sha1))?[ ]+checksum)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.checksum.monit" }
-				},
-				"patterns": [{
-					"name": "keyword.control.checksum.monit",
-					"match": "(?i)(and[ ]+)?(expect)"
-				},{ "include": "#strings" },
-					{ "include": "#rates" },
-					{ "include": "#noises" },
-					{ "include": "#comments"
-				}]
-			},{
-				"begin": "(?i)\\b(if[ ]+changed([ ]+(md5|sha1))?[ ]+checksum)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.checksum.monit" }
-				},
-				"patterns": [{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{ "include": "#actions" },
-				{ "include": "#comments"
-			}]
-		},
-		"inode": {
-			"comment": "Monit inode tests",
-			"patterns": [{
-				"begin": "(?i)\\b(if[ ]+inode([ ]+usage)?)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.inode.monit" }
-				},
-				"patterns": [{
-					"name": "constant.numeric.monit",
-					"match": "(?i)([\\d]+)([ ]?(percent|%))?"
-				},{ "include": "#operators" },
-					{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{
-				"begin": "(?i)\\b(if[ ]+inode[ ]+free)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.inode.monit" }
-				},
-				"patterns": [{
-					"name": "constant.numeric.monit",
-					"match": "(?i)([\\d]+)([ ]?(percent|%))?"
-				},{ "include": "#operators" },
-					{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{ "include": "#actions" },
-				{ "include": "#comments"
-			}]
-		},
-		"space": {
-			"comment": "Monit space tests",
-			"patterns": [{
-				"begin": "(?i)\\b(if[ ]+space([ ]+usage)?)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.space.monit" }
-				},
-				"patterns": [{
-					"name": "constant.numeric.monit",
-					"match": "(?i)([\\d]+)([ ]?(percent|%))?"
-				},{ "include": "#operators" },
-					{ "include": "#units" },
-					{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{
-				"begin": "(?i)\\b(if[ ]+space[ ]+free)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.space.monit" }
-				},
-				"patterns": [{
-					"name": "constant.numeric.monit",
-					"match": "(?i)([\\d]+)([ ]?(percent|%))?"
-				},{ "include": "#operators" },
-					{ "include": "#units" },
-					{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{ "include": "#actions" },
-				{ "include": "#comments"
-			}]
-		},
-		"read": {
-			"comment": "Monit read tests",
-			"patterns": [{
-				"begin": "(?i)\\b(if[ ]+read([ ]+rate)?)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.read.monit" }
-				},
-				"patterns": [{
-					"name": "constant.numeric.monit",
-					"match": "(?i)([\\d]+)([ ]+xoperation(s)?(/s)?)?"
-				},{ "include": "#operators" },
-					{ "include": "#units" },
-					{ "include": "#currenttimes" },
-					{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{ "include": "#actions" },
-				{ "include": "#comments"
-			}]
-		},
-		"write": {
-			"comment": "Monit write tests",
-			"patterns": [{
-				"begin": "(?i)\\b(if[ ]+write([ ]+rate)?)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.write.monit" }
-				},
-				"patterns": [{
-					"name": "constant.numeric.monit",
-					"match": "(?i)([\\d]+)([ ]+xoperation(s)?(/s)?)?"
-				},{ "include": "#operators" },
-					{ "include": "#units" },
-					{ "include": "#currenttimes" },
-					{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{ "include": "#actions" },
-				{ "include": "#comments"
-			}]
-		},
-		"servicetime": {
-			"comment": "Monit service time tests",
-			"patterns": [{
-				"begin": "(?i)\\b(if[ ]+service[ ]?time)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.servicetime.monit" }
-				},
-				"patterns": [{
-					"name": "constant.numeric.monit",
-					"match": "(?i)([\\d]+)"
-				},{ "include": "#operators" },
-					{ "include": "#seconds" },
-					{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{ "include": "#actions" },
-				{ "include": "#comments"
-			}]
-		},
-		"fsflag": {
-			"comment": "Monit fsflag tests",
-			"patterns": [{
-				"begin": "(?i)\\b(if[ ]+changed[ ]+fsflag(s)?)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.fsflag.monit" }
-				},
-				"patterns": [{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{ "include": "#actions" },
-				{ "include": "#comments"
-			}]
-		},
-		"permission": {
-			"comment": "Monit permission tests",
-			"patterns": [{
-				"begin": "(?i)\\b(if[ ]+failed[ ]+perm(ission)?)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.permission.monit" }
-				},
-				"patterns": [{
-					"name": "constant.numeric.monit",
-					"match": "(?i)([\\d]+)"
-				},{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{
-				"begin": "(?i)\\b(if[ ]+changed[ ]+perm(ission)?)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.permission.monit" }
-				},
-				"patterns": [{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{ "include": "#actions" },
-				{ "include": "#comments"
-			}]
-		},
-		"programmatch": {
-			"comment": "Monit program match tests",
-			"patterns": [{
-				"begin": "(?i)\\b(if[ ]+content)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.programmatch.monit" }
-				},
-				"patterns": [{ "include": "#urloperations" },
-					{ "include": "#strings" },
-					{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{
-				"begin": "(?i)\\b(if[ ]+content[ ]+(not[ ]+)?changed)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.programmatch.monit" }
-				},
-				"patterns": [{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{ "include": "#actions" },
-				{ "include": "#comments"
-			}]
-		},
-		"match": {
-			"comment": "Monit match tests",
-			"patterns": [{
-				"begin": "(?i)\\b(if[ ]+content)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.match.monit" }
-				},
-				"patterns": [{ "include": "#urloperations" },
-					{ "include": "#paths" },
-					{ "include": "#strings" },
-					{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{
-				"begin": "(?i)\\b(ignore[ ]+content)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.match.monit" }
-				},
-				"patterns": [{ "include": "#urloperations" },
-					{ "include": "#paths" },
-					{ "include": "#strings" },
-					{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{
-				"begin": "(?i)\\b(if[ ]+(not[ ]+)?+match)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.match.monit" }
-				},
-				"patterns": [{ "include": "#paths" },
-					{ "include": "#strings" },
-					{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{
-				"begin": "(?i)\\b(ignore[ ]+(not[ ]+)?+match)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.match.monit" }
-				},
-				"patterns": [{ "include": "#paths" },
-					{ "include": "#strings" },
-					{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{ "include": "#actions" },
-				{ "include": "#comments"
-			}]
-		},
-		"size": {
-			"comment": "Monit size tests",
-			"patterns": [{
-				"begin": "(?i)\\b(if[ ]+size)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.size.monit" }
-				},
-				"patterns": [{
-					"name": "constant.numeric.monit",
-					"match": "(?i)([\\d]+)"
-				},{ "include": "#operators" },
-					{ "include": "#units" },
-					{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{
-				"begin": "(?i)\\b(if[ ]+changed[ ]+size)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.size.monit" }
-				},
-				"patterns": [{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{ "include": "#actions" },
-				{ "include": "#comments"
-			}]
-		},
-		"hardlink": {
-			"comment": "Monit hardlink tests",
-			"patterns": [{
-				"begin": "(?i)\\b(if[ ]+hardlink)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.hardlink.monit" }
-				},
-				"patterns": [{
-					"name": "constant.numeric.monit",
-					"match": "(?i)([\\d]+)"
-				},{ "include": "#operators" },
-					{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{
-				"begin": "(?i)\\b(if[ ]+changed[ ]+hardlink)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.hardlink.monit" }
-				},
-				"patterns": [{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{ "include": "#actions" },
-				{ "include": "#comments"
-			}]
-		},
-		"uid": {
-			"comment": "Monit uid tests",
-			"patterns": [{
-				"begin": "(?i)\\b(if[ ]+failed[ ]+uid)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.uid.monit" }
-				},
-				"patterns": [{
-					"name": "constant.numeric.monit",
-					"match": "(?i)([\\d]+)"
-				},{ "include": "#operators" },
-					{ "include": "#strings" },
-					{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{ "include": "#actions" },
-				{ "include": "#comments"
-			}]
-		},
-		"euid": {
-			"comment": "Monit euid tests",
-			"patterns": [{
-				"begin": "(?i)\\b(if[ ]+failed[ ]+euid)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.euid.monit" }
-				},
-				"patterns": [{
-					"name": "constant.numeric.monit",
-					"match": "(?i)([\\d]+)"
-				},{ "include": "#operators" },
-					{ "include": "#strings" },
-					{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{ "include": "#actions" },
-				{ "include": "#comments"
-			}]
-		},
-		"secattr": {
-			"comment": "Monit secattr tests",
-			"patterns": [{
-				"begin": "(?i)\\b(if[ ]+failed[ ]+security[ ]+attribute(s)?)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.secattr.monit" }
-				},
-				"patterns": [{ "include": "#strings" },
-					{ "include": "#paths" },
-					{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{ "include": "#actions" },
-				{ "include": "#comments"
-			}]
-		},
-		"filedescriptorssystem": {
-			"comment": "Monit system filedescriptor tests",
-			"patterns": [{
-				"begin": "(?i)\\b(if[ ]+filedescriptors)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.filedescriptorssystem.monit" }
-				},
-				"patterns": [{
-					"name": "constant.numeric.monit",
-					"match": "(?i)([\\d]+)([ ]?(percent|%))?"
-				},{ "include": "#operators" },
-					{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{ "include": "#actions" },
-				{ "include": "#comments"
-			}]
-		},
-		"filedescriptorsprocess": {
-			"comment": "Monit process filedescriptor tests",
-			"patterns": [{
-				"begin": "(?i)\\b(if[ ]+filedescriptors)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.filedescriptorsprocess.monit" }
-				},
-				"patterns": [{
-					"name": "constant.numeric.monit",
-					"match": "(?i)([\\d]+)([ ]?(percent|%))?"
-				},{ "include": "#operators" },
-					{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{ "include": "#actions" },
-				{ "include": "#comments"
-			}]
-		},
-		"filedescriptorsprocesstotal": {
-			"comment": "Monit process total filedescriptor tests",
-			"patterns": [{
-				"begin": "(?i)\\b(if[ ]+total[ ]+filedescriptors)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.filedescriptorsprocess.monit" }
-				},
-				"patterns": [{
-					"name": "constant.numeric.monit",
-					"match": "(?i)([\\d]+)"
-				},{ "include": "#operators" },
-					{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{ "include": "#actions" },
-				{ "include": "#comments"
-			}]
-		},
-		"gid": {
-			"comment": "Monit gid tests",
-			"patterns": [{
-				"begin": "(?i)\\b(if[ ]+failed[ ]+gid)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.gid.monit" }
-				},
-				"patterns": [{
-					"name": "constant.numeric.monit",
-					"match": "(?i)([\\d]+)"
-				},{ "include": "#operators" },
-					{ "include": "#strings" },
-					{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{ "include": "#actions" },
-				{ "include": "#comments"
-			}]
-		},
-		"linkstatus": {
-			"comment": "Monit link status tests",
-			"patterns": [{
-				"begin": "(?i)\\b(if[ ]+failed[ ]+link)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.linkstatus.monit" }
-				},
-				"patterns": [{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{
-				"begin": "(?i)\\b(if[ ]+link[ ]+down)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.linkstatus.monit" }
-				},
-				"patterns": [{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{
-				"begin": "(?i)\\b(if[ ]+link[ ]+up)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.linkstatus.monit" }
-				},
-				"patterns": [{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{ "include": "#actions" },
-				{ "include": "#comments"
-			}]
-		},
-		"linkspeed": {
-			"comment": "Monit link speed tests",
-			"patterns": [{
-				"begin": "(?i)\\b(if[ ]+changed[ ]+link)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.linkspeed.monit" }
-				},
-				"patterns": [{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{ "include": "#actions" },
-				{ "include": "#comments"
-			}]
-		},
-		"linksaturation": {
-			"comment": "Monit link saturation tests",
-			"patterns": [{
-				"begin": "(?i)\\b(if[ ]+saturation)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.linksaturation.monit" }
-				},
-				"patterns": [{
-					"name": "constant.numeric.monit",
-					"match": "(?i)([\\d]+)([ ]?(percent|%))?"
-				},{ "include": "#operators" },
-					{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{ "include": "#actions" },
-				{ "include": "#comments"
-			}]
-		},
-		"upload": {
-			"comment": "Monit upload tests",
-			"patterns": [{
-				"begin": "(?i)\\b(if[ ]+upload(ed)?)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.upload.monit" }
-				},
-				"patterns": [{
-					"name": "constant.numeric.monit",
-					"match": "(?i)([\\d]+)([ ]+packet(s)?(/s)?)?"
-				},{ "include": "#operators" },
-					{ "include": "#units" },
-					{ "include": "#currenttimes" },
-					{ "include": "#noises" },
-					{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{
-				"begin": "(?i)\\b(if[ ]+total[ ]+upload(ed)?)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.upload.monit" }
-				},
-				"patterns": [{
-					"name": "constant.numeric.monit",
-					"match": "(?i)([\\d]+)([ ]+packet(s)?(/s)?)?"
-				},{ "include": "#operators" },
-					{ "include": "#units" },
-					{ "include": "#totaltimes" },
-					{ "include": "#noises" },
-					{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{ "include": "#actions" },
-				{ "include": "#comments"
-			}]
-		},
-		"download": {
-			"comment": "Monit download tests",
-			"patterns": [{
-				"begin": "(?i)\\b(if[ ]+download(ed)?)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.download.monit" }
-				},
-				"patterns": [{
-					"name": "constant.numeric.monit",
-					"match": "(?i)([\\d]+)([ ]+packet(s)?(/s)?)?"
-				},{ "include": "#operators" },
-					{ "include": "#units" },
-					{ "include": "#currenttimes" },
-					{ "include": "#noises" },
-					{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{
-				"begin": "(?i)\\b(if[ ]+total[ ]+download(ed)?)",
-				"end": "(?i)\\b(?=(then|if|check))\\b",
-				"captures": {
-					"1": { "name": "keyword.control.download.monit" }
-				},
-				"patterns": [{
-					"name": "constant.numeric.monit",
-					"match": "(?i)([\\d]+)([ ]+packet(s)?(/s)?)?"
-				},{ "include": "#operators" },
-					{ "include": "#units" },
-					{ "include": "#totaltimes" },
-					{ "include": "#noises" },
-					{ "include": "#rates" },
-					{ "include": "#comments"
-				}]
-			},{ "include": "#actions" },
+			},{ "include": "#action" },
 				{ "include": "#comments"
 			}]
 		},
 		"operators": {
 			"comment": "Monit operators",
 			"patterns": [{
-				"name": "keyword.control.operator.monit",
+				"name": "keyword.operator.monit",
 				"match": "(?i)(more|greater|gt|>|older)"
 			},{
-				"name": "keyword.control.operator.monit",
+				"name": "keyword.operator.monit",
 				"match": "(?i)(ge|=>)"
 			},{
-				"name": "keyword.control.operator.monit",
+				"name": "keyword.operator.monit",
 				"match": "(?i)(less|lt|<|newer)"
 			},{
-				"name": "keyword.control.operator.monit",
+				"name": "keyword.operator.monit",
 				"match": "(?i)(le|<=)"
 			},{
-				"name": "keyword.control.operator.monit",
+				"name": "keyword.operator.monit",
 				"match": "(?i)(equal|eq|==|=)"
 			},{
-				"name": "keyword.control.operator.monit",
+				"name": "keyword.operator.monit",
 				"match": "(?i)(notequal|ne|!=)"
 			},{
-				"name": "keyword.control.operator.monit",
+				"name": "keyword.operator.monit",
 				"match": "(?i)(changed)"
 			}]
 		},
@@ -2004,52 +2260,743 @@
 				}
 			}]
 		},
-		"actions": {
+		"action": {
 			"comment": "Monit actions",
 			"patterns": [{
-				"match": "(?i)\\b(alert)",
+				"match": "(?i)\\b(then[ ]+alert)",
 				"captures": {
 					"1": { "name": "keyword.control.action.monit" }
 				}
 			},{
-				"match": "(?i)\\b(exec)([ ]+\"[^\"]+\"|'[^']+'|\\/[\\w\\-_.\\/:#%]+)",
+				"match": "(?i)\\b(then[ ]+exec)([ ]+((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+)))",
 				"captures": {
 					"1": { "name": "keyword.control.action.monit" },
 					"2": { "name": "constant.character.monit" }
 				},
-				"patterns": [{ "include": "#useroptions" },
+				"patterns": [{ "include": "#useroption" },
 					{ "include": "#exectimeouts" },
 					{ "include": "#repeats"
 				}]
 			},{
-				"match": "(?i)\\b(ignore)",
+				"match": "(?i)\\b(then[ ]+ignore)",
 				"captures": {
 					"1": { "name": "keyword.control.action.monit" }
 				}
 			},{
-				"match": "(?i)\\b(monitor)",
+				"match": "(?i)\\b(then[ ]+monitor)",
 				"captures": {
 					"1": { "name": "keyword.control.action.monit" }
 				}
 			},{
-				"match": "(?i)\\b(restart)",
+				"match": "(?i)\\b(then[ ]+restart)",
 				"captures": {
 					"1": { "name": "keyword.control.action.monit" }
 				}
 			},{
-				"match": "(?i)\\b(start)",
+				"match": "(?i)\\b(then[ ]+start)",
 				"captures": {
 					"1": { "name": "keyword.control.action.monit" }
 				}
 			},{
-				"match": "(?i)\\b(stop)",
+				"match": "(?i)\\b(then[ ]+stop)",
 				"captures": {
 					"1": { "name": "keyword.control.action.monit" }
 				}
 			},{
-				"match": "(?i)\\b(unmonitor)",
+				"match": "(?i)\\b(then[ ]+unmonitor)",
 				"captures": {
 					"1": { "name": "keyword.control.action.monit" }
+				}
+			}]
+		},
+		"rates": {
+			"comment": "Monit rate",
+			"patterns": [{
+				"match": "(?i)\\b(for[ ]+)?([\\d]+)([ ]+time(s)?[ ]+with(in)?)?([ ]+[\\d]+)([ ]+cycle(s)?)\\b",
+				"captures": {
+					"1": { "name": "keyword.control.repeat.monit" },
+					"2": { "name": "constant.numeric.monit" },
+					"3": { "name": "keyword.control.repeat.monit" },
+					"6": { "name": "constant.numeric.monit" },
+					"7": { "name": "keyword.control.repeat.monit" }
+				}
+			},{
+				"match": "(?i)\\b(for[ ]+)?([\\d]+)([ ]+cycle(s)?)\\b",
+				"captures": {
+					"1": { "name": "keyword.control.repeat.monit" },
+					"2": { "name": "constant.numeric.monit" },
+					"3": { "name": "keyword.control.repeat.monit" }
+				}
+			}]
+		},
+		"recoverys": {
+			"comment": "Monit recovery",
+			"patterns": [{
+				"begin": "(?i)\\b(else[ ]+if[ ]+(recovered|passed|succeeded|failed)[ ]+)([\\d]+)\\b",
+				"end": "(?i)\\b(?=(then))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.recovery.monit" },
+					"2": { "name": "constant.numeric.monit" }
+				},
+				"patterns": [{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{
+				"begin": "(?i)\\b(else)\\b",
+				"end": "(?i)\\b(?=(then))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.recovery.monit" },
+					"2": { "name": "constant.numeric.monit" }
+				},
+				"patterns": [{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			}]
+		},
+		"checksum": {
+			"comment": "Monit checksum tests",
+			"patterns": [{
+				"begin": "(?i)\\b(if[ ]+failed([ ]+(md5|sha1))?[ ]+checksum)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.checksum.monit" }
+				},
+				"patterns": [{
+					"name": "keyword.control.checksum.monit",
+					"match": "(?i)(and[ ]+)?(expect)"
+				},{ "include": "#strings" },
+					{ "include": "#rates" },
+					{ "include": "#noises" },
+					{ "include": "#comments"
+				}]
+			},{
+				"begin": "(?i)\\b(if[ ]+changed([ ]+(md5|sha1))?[ ]+checksum)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.checksum.monit" }
+				},
+				"patterns": [{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{ "include": "#action" },
+				{ "include": "#comments"
+			}]
+		},
+		"hashtype": {
+			"comment": "Monit hash type",
+			"patterns": [{
+				"match": "(?i)\\b((md5|sha1)))",
+				"captures": {
+					"1": { "name": "keyword.control.hashtype.monit" }
+				}
+			}]
+		},
+		"inode": {
+			"comment": "Monit inode tests",
+			"patterns": [{
+				"begin": "(?i)\\b(if[ ]+inode([ ]+usage)?)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.inode.monit" }
+				},
+				"patterns": [{
+					"name": "constant.numeric.monit",
+					"match": "(?i)([\\d]+)([ ]?(percent|%))?"
+				},{ "include": "#operators" },
+					{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{
+				"begin": "(?i)\\b(if[ ]+inode[ ]+free)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.inode.monit" }
+				},
+				"patterns": [{
+					"name": "constant.numeric.monit",
+					"match": "(?i)([\\d]+)([ ]?(percent|%))?"
+				},{ "include": "#operators" },
+					{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{ "include": "#action" },
+				{ "include": "#comments"
+			}]
+		},
+		"space": {
+			"comment": "Monit space tests",
+			"patterns": [{
+				"begin": "(?i)\\b(if[ ]+space([ ]+usage)?)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.space.monit" }
+				},
+				"patterns": [{
+					"name": "constant.numeric.monit",
+					"match": "(?i)([\\d]+)([ ]?(percent|%))?"
+				},{ "include": "#operators" },
+					{ "include": "#units" },
+					{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{
+				"begin": "(?i)\\b(if[ ]+space[ ]+free)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.space.monit" }
+				},
+				"patterns": [{
+					"name": "constant.numeric.monit",
+					"match": "(?i)([\\d]+)([ ]?(percent|%))?"
+				},{ "include": "#operators" },
+					{ "include": "#units" },
+					{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{ "include": "#action" },
+				{ "include": "#comments"
+			}]
+		},
+		"read": {
+			"comment": "Monit read tests",
+			"patterns": [{
+				"begin": "(?i)\\b(if[ ]+read([ ]+rate)?)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.read.monit" }
+				},
+				"patterns": [{
+					"name": "constant.numeric.monit",
+					"match": "(?i)([\\d]+)([ ]+xoperation(s)?(/s)?)?"
+				},{ "include": "#operators" },
+					{ "include": "#units" },
+					{ "include": "#currenttimes" },
+					{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{ "include": "#action" },
+				{ "include": "#comments"
+			}]
+		},
+		"write": {
+			"comment": "Monit write tests",
+			"patterns": [{
+				"begin": "(?i)\\b(if[ ]+write([ ]+rate)?)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.write.monit" }
+				},
+				"patterns": [{
+					"name": "constant.numeric.monit",
+					"match": "(?i)([\\d]+)([ ]+xoperation(s)?(/s)?)?"
+				},{ "include": "#operators" },
+					{ "include": "#units" },
+					{ "include": "#currenttimes" },
+					{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{ "include": "#action" },
+				{ "include": "#comments"
+			}]
+		},
+		"servicetime": {
+			"comment": "Monit service time tests",
+			"patterns": [{
+				"begin": "(?i)\\b(if[ ]+service[ ]?time)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.servicetime.monit" }
+				},
+				"patterns": [{
+					"name": "constant.numeric.monit",
+					"match": "(?i)([\\d]+)"
+				},{ "include": "#operators" },
+					{ "include": "#seconds" },
+					{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{ "include": "#action" },
+				{ "include": "#comments"
+			}]
+		},
+		"fsflag": {
+			"comment": "Monit fsflag tests",
+			"patterns": [{
+				"begin": "(?i)\\b(if[ ]+changed[ ]+fsflag(s)?)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.fsflag.monit" }
+				},
+				"patterns": [{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{ "include": "#action" },
+				{ "include": "#comments"
+			}]
+		},
+		"unit": {
+			"comment": "Monit units",
+			"patterns": [{
+				"name": "support.type.byte.monit",
+				"match": "(?i)\\b(bytes|byte|b)(/s)?"
+			},{
+				"name": "support.type.kilobyte.monit",
+				"match": "(?i)\\b(kilobytes|kilobyte|kb)(/s)?"
+			},{
+				"name": "support.type.megabyte.monit",
+				"match": "(?i)\\b(megabytes|megabyte|mb)(/s)?"
+			},{
+				"name": "support.type.gigabyte.monit",
+				"match": "(?i)\\b(gigabytes|gigabyte|gb)(/s)?"
+			}]
+		},
+		"permission": {
+			"comment": "Monit permission tests",
+			"patterns": [{
+				"begin": "(?i)\\b(if[ ]+failed[ ]+perm(ission)?)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.permission.monit" }
+				},
+				"patterns": [{
+					"name": "constant.numeric.monit",
+					"match": "(?i)([\\d]+)"
+				},{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{
+				"begin": "(?i)\\b(if[ ]+changed[ ]+perm(ission)?)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.permission.monit" }
+				},
+				"patterns": [{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{ "include": "#action" },
+				{ "include": "#comments"
+			}]
+		},
+		"programmatch": {
+			"comment": "Monit program match tests",
+			"patterns": [{
+				"begin": "(?i)\\b(if[ ]+content)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.programmatch.monit" }
+				},
+				"patterns": [{ "include": "#urloperations" },
+					{ "include": "#strings" },
+					{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{
+				"begin": "(?i)\\b(if[ ]+content[ ]+(not[ ]+)?changed)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.programmatch.monit" }
+				},
+				"patterns": [{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{ "include": "#action" },
+				{ "include": "#comments"
+			}]
+		},
+		"match": {
+			"comment": "Monit match tests",
+			"patterns": [{
+				"begin": "(?i)\\b(if[ ]+content)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.match.monit" }
+				},
+				"patterns": [{ "include": "#urloperations" },
+					{ "include": "#paths" },
+					{ "include": "#strings" },
+					{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{
+				"begin": "(?i)\\b(ignore[ ]+content)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.match.monit" }
+				},
+				"patterns": [{ "include": "#urloperations" },
+					{ "include": "#paths" },
+					{ "include": "#strings" },
+					{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{
+				"begin": "(?i)\\b(if[ ]+(not[ ]+)?+match)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.match.monit" }
+				},
+				"patterns": [{ "include": "#paths" },
+					{ "include": "#strings" },
+					{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{
+				"begin": "(?i)\\b(ignore[ ]+(not[ ]+)?+match)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.match.monit" }
+				},
+				"patterns": [{ "include": "#paths" },
+					{ "include": "#strings" },
+					{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{ "include": "#action" },
+				{ "include": "#comments"
+			}]
+		},
+		"size": {
+			"comment": "Monit size tests",
+			"patterns": [{
+				"begin": "(?i)\\b(if[ ]+size)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.size.monit" }
+				},
+				"patterns": [{
+					"name": "constant.numeric.monit",
+					"match": "(?i)([\\d]+)"
+				},{ "include": "#operators" },
+					{ "include": "#units" },
+					{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{
+				"begin": "(?i)\\b(if[ ]+changed[ ]+size)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.size.monit" }
+				},
+				"patterns": [{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{ "include": "#action" },
+				{ "include": "#comments"
+			}]
+		},
+		"hardlink": {
+			"comment": "Monit hardlink tests",
+			"patterns": [{
+				"begin": "(?i)\\b(if[ ]+hardlink)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.hardlink.monit" }
+				},
+				"patterns": [{
+					"name": "constant.numeric.monit",
+					"match": "(?i)([\\d]+)"
+				},{ "include": "#operators" },
+					{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{
+				"begin": "(?i)\\b(if[ ]+changed[ ]+hardlink)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.hardlink.monit" }
+				},
+				"patterns": [{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{ "include": "#action" },
+				{ "include": "#comments"
+			}]
+		},
+		"uid": {
+			"comment": "Monit uid tests",
+			"patterns": [{
+				"begin": "(?i)\\b(if[ ]+failed[ ]+uid)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.uid.monit" }
+				},
+				"patterns": [{
+					"name": "constant.numeric.monit",
+					"match": "(?i)([\\d]+)"
+				},{ "include": "#operators" },
+					{ "include": "#strings" },
+					{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{ "include": "#action" },
+				{ "include": "#comments"
+			}]
+		},
+		"euid": {
+			"comment": "Monit euid tests",
+			"patterns": [{
+				"begin": "(?i)\\b(if[ ]+failed[ ]+euid)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.euid.monit" }
+				},
+				"patterns": [{
+					"name": "constant.numeric.monit",
+					"match": "(?i)([\\d]+)"
+				},{ "include": "#operators" },
+					{ "include": "#strings" },
+					{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{ "include": "#action" },
+				{ "include": "#comments"
+			}]
+		},
+		"secattr": {
+			"comment": "Monit secattr tests",
+			"patterns": [{
+				"begin": "(?i)\\b(if[ ]+failed[ ]+security[ ]+attribute(s)?)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.secattr.monit" }
+				},
+				"patterns": [{ "include": "#strings" },
+					{ "include": "#paths" },
+					{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{ "include": "#action" },
+				{ "include": "#comments"
+			}]
+		},
+		"filedescriptorssystem": {
+			"comment": "Monit system filedescriptor tests",
+			"patterns": [{
+				"begin": "(?i)\\b(if[ ]+filedescriptors)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.filedescriptorssystem.monit" }
+				},
+				"patterns": [{
+					"name": "constant.numeric.monit",
+					"match": "(?i)([\\d]+)([ ]?(percent|%))?"
+				},{ "include": "#operators" },
+					{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{ "include": "#action" },
+				{ "include": "#comments"
+			}]
+		},
+		"filedescriptorsprocess": {
+			"comment": "Monit process filedescriptor tests",
+			"patterns": [{
+				"begin": "(?i)\\b(if[ ]+filedescriptors)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.filedescriptorsprocess.monit" }
+				},
+				"patterns": [{
+					"name": "constant.numeric.monit",
+					"match": "(?i)([\\d]+)([ ]?(percent|%))?"
+				},{ "include": "#operators" },
+					{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{ "include": "#action" },
+				{ "include": "#comments"
+			}]
+		},
+		"filedescriptorsprocesstotal": {
+			"comment": "Monit process total filedescriptor tests",
+			"patterns": [{
+				"begin": "(?i)\\b(if[ ]+total[ ]+filedescriptors)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.filedescriptorsprocess.monit" }
+				},
+				"patterns": [{
+					"name": "constant.numeric.monit",
+					"match": "(?i)([\\d]+)"
+				},{ "include": "#operators" },
+					{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{ "include": "#action" },
+				{ "include": "#comments"
+			}]
+		},
+		"gid": {
+			"comment": "Monit gid tests",
+			"patterns": [{
+				"begin": "(?i)\\b(if[ ]+failed[ ]+gid)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.gid.monit" }
+				},
+				"patterns": [{
+					"name": "constant.numeric.monit",
+					"match": "(?i)([\\d]+)"
+				},{ "include": "#operators" },
+					{ "include": "#strings" },
+					{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{ "include": "#action" },
+				{ "include": "#comments"
+			}]
+		},
+		"linkstatus": {
+			"comment": "Monit link status tests",
+			"patterns": [{
+				"begin": "(?i)\\b(if[ ]+failed[ ]+link)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.linkstatus.monit" }
+				},
+				"patterns": [{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{
+				"begin": "(?i)\\b(if[ ]+link[ ]+down)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.linkstatus.monit" }
+				},
+				"patterns": [{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{
+				"begin": "(?i)\\b(if[ ]+link[ ]+up)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.linkstatus.monit" }
+				},
+				"patterns": [{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{ "include": "#action" },
+				{ "include": "#comments"
+			}]
+		},
+		"linkspeed": {
+			"comment": "Monit link speed tests",
+			"patterns": [{
+				"begin": "(?i)\\b(if[ ]+changed[ ]+link)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.linkspeed.monit" }
+				},
+				"patterns": [{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{ "include": "#action" },
+				{ "include": "#comments"
+			}]
+		},
+		"linksaturation": {
+			"comment": "Monit link saturation tests",
+			"patterns": [{
+				"begin": "(?i)\\b(if[ ]+saturation)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.linksaturation.monit" }
+				},
+				"patterns": [{
+					"name": "constant.numeric.monit",
+					"match": "(?i)([\\d]+)([ ]?(percent|%))?"
+				},{ "include": "#operators" },
+					{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{ "include": "#action" },
+				{ "include": "#comments"
+			}]
+		},
+		"upload": {
+			"comment": "Monit upload tests",
+			"patterns": [{
+				"begin": "(?i)\\b(if[ ]+upload(ed)?)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.upload.monit" }
+				},
+				"patterns": [{
+					"name": "constant.numeric.monit",
+					"match": "(?i)([\\d]+)([ ]+packet(s)?(/s)?)?"
+				},{ "include": "#operators" },
+					{ "include": "#units" },
+					{ "include": "#currenttimes" },
+					{ "include": "#noises" },
+					{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{
+				"begin": "(?i)\\b(if[ ]+total[ ]+upload(ed)?)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.upload.monit" }
+				},
+				"patterns": [{
+					"name": "constant.numeric.monit",
+					"match": "(?i)([\\d]+)([ ]+packet(s)?(/s)?)?"
+				},{ "include": "#operators" },
+					{ "include": "#units" },
+					{ "include": "#totaltimes" },
+					{ "include": "#noises" },
+					{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{ "include": "#action" },
+				{ "include": "#comments"
+			}]
+		},
+		"download": {
+			"comment": "Monit download tests",
+			"patterns": [{
+				"begin": "(?i)\\b(if[ ]+download(ed)?)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.download.monit" }
+				},
+				"patterns": [{
+					"name": "constant.numeric.monit",
+					"match": "(?i)([\\d]+)([ ]+packet(s)?(/s)?)?"
+				},{ "include": "#operators" },
+					{ "include": "#units" },
+					{ "include": "#currenttimes" },
+					{ "include": "#noises" },
+					{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{
+				"begin": "(?i)\\b(if[ ]+total[ ]+download(ed)?)",
+				"end": "(?i)\\b(?=(then|if|check))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.download.monit" }
+				},
+				"patterns": [{
+					"name": "constant.numeric.monit",
+					"match": "(?i)([\\d]+)([ ]+packet(s)?(/s)?)?"
+				},{ "include": "#operators" },
+					{ "include": "#units" },
+					{ "include": "#totaltimes" },
+					{ "include": "#noises" },
+					{ "include": "#rates" },
+					{ "include": "#comments"
+				}]
+			},{ "include": "#action" },
+				{ "include": "#comments"
+			}]
+		},
+		"reminder": {
+			"comment": "Monit reminder",
+			"patterns": [{
+				"match": "(?i)\\b(reminder[ ]+)(\\d)([ ]+cycle(s)?)?\\b",
+				"captures": {
+					"1": { "name": "keyword.control.reminder.monit" },
+					"2": { "name": "constant.numeric.monit" },
+					"3": { "name": "keyword.control.reminder.monit" }
 				}
 			}]
 		},
@@ -2070,50 +3017,291 @@
 				}]
 			}]
 		},
-		"httpds": {
-			"comment": "Monit httpd options",
-			"patterns": [{ "include": "#ssls" },
-				{ "include": "#pemfiles" },
-				{ "include": "#clientpemfiles" },
-				{ "include": "#allowselfcerts" },
-				{ "include": "#signatures" },
-				{ "include": "#bindaddresses" },
-				{ "include": "#allows" },
-				{ "include": "#httpdports" },
-				{ "include": "#httpdsockets" 
-			}]
-		},
-		"ssls": {
-			"comment": "Monit ssl options",
+		"startdelay": {
+			"comment": "Monit start delay",
 			"patterns": [{
-				"match": "(?i)\\b(ssl[ ]+)(enable|disable)\\b",
+				"match": "(?i)\\b(start[ ]+delay[ ]+)([\\d]+)\\b",
 				"captures": {
-					"1": { "name": "keyword.control.ssl.monit" },
+					"1": { "name": "keyword.control.startdelay.monit" },
 					"2": { "name": "constant.numeric.monit" }
 				}
 			}]
 		},
-		"pemfiles": {
+		"limit": {
+			"comment": "Monit limit options",
+			"patterns": [{ "include": "#limitbuffer" },
+				{ "include": "#limittimeout"
+			}]
+		},
+		"limitbuffer": {
+			"comment": "Monit buffer limit options",
+			"patterns": [{
+				"match": "(?i)\\b(sendexpectbuffer[ ]*:[ ]+)([\\d]+)\\b",
+				"captures": {
+					"1": { "name": "keyword.control.buffer.monit" },
+					"2": { "name": "constant.numeric.monit" }
+				}
+			},{
+				"match": "(?i)\\b(filecontentbuffer[ ]*:[ ]+)([\\d]+)\\b",
+				"captures": {
+					"1": { "name": "keyword.control.buffer.monit" },
+					"2": { "name": "constant.numeric.monit" }
+				}
+			},{
+				"match": "(?i)\\b(httpcontentbuffer[ ]*:[ ]+)([\\d]+)\\b",
+				"captures": {
+					"1": { "name": "keyword.control.buffer.monit" },
+					"2": { "name": "constant.numeric.monit" }
+				}
+			},{
+				"match": "(?i)\\b(programoutput[ ]*:[ ]+)([\\d]+)\\b",
+				"captures": {
+					"1": { "name": "keyword.control.buffer.monit" },
+					"2": { "name": "constant.numeric.monit" }
+				}
+			},{ "include": "#bytes" },
+			{ "include": "#comments"
+			}]
+		},
+		"limittimeout": {
+			"comment": "Monit timeout limit options",
+			"patterns": [{
+				"match": "(?i)\\b(networktimeout[ ]*:[ ]+)([\\d]+)\\b",
+				"captures": {
+					"1": { "name": "keyword.control.timeout.monit" },
+					"2": { "name": "constant.numeric.monit" }
+				}
+			},{
+				"match": "(?i)\\b(programtimeout[ ]*:[ ]+)([\\d]+)\\b",
+				"captures": {
+					"1": { "name": "keyword.control.timeout.monit" },
+					"2": { "name": "constant.numeric.monit" }
+				}
+			},{
+				"match": "(?i)\\b(stoptimeout[ ]*:[ ]+)([\\d]+)\\b",
+				"captures": {
+					"1": { "name": "keyword.control.timeout.monit" },
+					"2": { "name": "constant.numeric.monit" }
+				}
+			},{
+				"match": "(?i)\\b(starttimeout[ ]*:[ ]+)([\\d]+)\\b",
+				"captures": {
+					"1": { "name": "keyword.control.timeout.monit" },
+					"2": { "name": "constant.numeric.monit" }
+				}
+			},{
+				"match": "(?i)\\b(restarttimeout[ ]*:[ ]+)([\\d]+)\\b",
+				"captures": {
+					"1": { "name": "keyword.control.timeout.monit" },
+					"2": { "name": "constant.numeric.monit" }
+				}
+			},{
+				"match": "(?i)\\b(exectimeout[ ]*:[ ]+)([\\d]+)\\b",
+				"captures": {
+					"1": { "name": "keyword.control.timeout.monit" },
+					"2": { "name": "constant.numeric.monit" }
+				}
+			},{ "include": "#seconds" },
+			{ "include": "#comments"
+			}]
+		},
+		"mmonitoption": {
+			"comment": "Monit mmonit options",
+			"patterns": [{
+				"begin": "(?i)\\b(timeout[ ]+)([\\d]+)([ ]+(seconds|second|s))\\b",
+				"end": "(?i)\\b(?=(if|then))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.mmonitoption.monit" },
+					"2": { "name": "constant.numeric.monit" },
+					"3": { "name": "keyword.control.mmonitoption.monit" }
+				},
+				"patterns": [{ "include": "#comments" },
+					{ "include": "#ssl" },
+					{ "include": "#sslchecksum" },
+					{ "include": "#sslversion" },
+					{ "include": "#certmd5" },
+					{ "include": "#hostgroups"
+				}]
+			},{ "include": "#comments"
+			}]
+		},
+		"credentials": {
+			"comment": "Monit credential",
+			"patterns": [{
+				"match": "(?i)\\b(register[ ]+credentials)\\b",
+				"captures": {
+					"1": { "name": "keyword.control.credentials.monit" }
+				}
+			}]
+		},
+		"ssl": {
+			"comment": "Monit ssl options",
+			"patterns": [{
+				"begin": "(?i)\\b((with[ ]+)?(tls|ssl[ ]+enable|enable[ ]+ssl|ssl)[ ]+\\{)",
+				"end": "(?i)(?=(\\}))",
+				"captures": {
+					"1": { "name": "keyword.control.ssl.monit" }
+				},
+				"patterns": [{ "include": "#comments" },
+					{ "include": "#ssloption"
+				}]
+			}]
+		},
+		"ssloption": {
+			"comment": "Monit ssl options",
+			"patterns": [{
+				"match": "(?i)\\b(verify[ ]*:[ ]+)(enable|disable)\\b",
+				"captures": {
+					"1": { "name": "keyword.control.ssloption.monit" },
+					"2": { "name": "constant.language.monit" }
+				}
+			},{
+				"match": "(?i)\\b(selfsigned[ ]*:[ ]+)(allow|reject)\\b",
+				"captures": {
+					"1": { "name": "keyword.control.ssloption.monit" },
+					"2": { "name": "constant.language.monit" }
+				}
+			},{
+				"match": "(?i)\\b(version[ ]*:[ ]+)(([-]?(sslv2|sslv3|tlsv1|tlsv11|tlsv12|tlsv13))|auto)\\b",
+				"captures": {
+					"1": { "name": "keyword.control.ssloption.monit" },
+					"2": { "name": "constant.language.monit" }
+				}
+			},{
+				"match": "(?i)\\b(cipher[ ]*:[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
+				"captures": {
+					"1": { "name": "keyword.control.ssloption.monit" },
+					"2": { "name": "constant.character.monit" }
+				}
+			},{
+				"match": "(?i)\\b((pemfile|pemchain|pemkey)[ ]*:[ ]+)((\"\\/[^\"]*\")|('\\/[^']*')|(\\/[\\w\\-_.\\/:#%]+))",
+				"captures": {
+					"1": { "name": "keyword.control.ssloption.monit" },
+					"3": { "name": "constant.character.monit" }
+				}
+			},{
+				"match": "(?i)\\b(clientpemfile[ ]*:[ ]+)((\"\\/[^\"]*\")|('\\/[^']*')|(\\/[\\w\\-_.\\/:#%]+))",
+				"captures": {
+					"1": { "name": "keyword.control.ssloption.monit" },
+					"2": { "name": "constant.character.monit" }
+				}
+			},{
+				"match": "(?i)\\b((cacertificatefile|cacertificatepath)[ ]*:[ ]+)((\"\\/[^\"]*\")|('\\/[^']*')|(\\/[\\w\\-_.\\/:#%]+))",
+				"captures": {
+					"1": { "name": "keyword.control.ssloption.monit" },
+					"3": { "name": "constant.character.monit" }
+				}
+			}]
+		},
+		"sslexpire": {
+			"comment": "Monit ssl expire",
+			"patterns": [{
+				"match": "(?i)\\b(certificate[ ]+valid[ ]+)((more|greater|gt|>|older)[ ]+)?([\\d]+)([ ]+(days|day))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.sslchecksum.monit" },
+					"2": { "name": "keyword.operator.monit" },
+					"4": { "name": "constant.numeric.monit" },
+					"5": { "name": "support.type.monit" }
+				}
+			}]
+		},
+		"sslchecksum": {
+			"comment": "Monit ssl checksum",
+			"patterns": [{
+				"match": "(?i)\\b(certificate[ ]+checksum[ ]+((md5|sha1)[ ]+)?)((equal|eq|==|=)[ ]+)?((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
+				"captures": {
+					"1": { "name": "keyword.control.sslchecksum.monit" },
+					"4": { "name": "keyword.operator.monit" },
+					"5": { "name": "constant.character.monit" }
+				}
+			}]
+		},
+		"checksumoperator": {
+			"comment": "Monit checksum operator",
+			"patterns": [{
+				"match": "(?i)\\b(equal|eq|==|=)\\b",
+				"captures": {
+					"1": { "name": "keyword.operator.monit" }
+				}
+			}]			
+		},
+		"sslversion": {
+			"comment": "Monit ssl version",
+			"patterns": [{
+				"match": "(?i)\\b([-]?(sslv2|sslv3|tlsv1|tlsv11|tlsv12|tlsv13))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.sslversion.monit" }
+				}
+			},{
+				"match": "(?i)\\b(auto)\\b",			
+				"captures": {
+					"1": { "name": "keyword.control.sslversion.monit" }
+				}
+			}]
+		},
+		"certmd5": {
+			"comment": "Monit cert md5",
+			"patterns": [{
+				"match": "(?i)\\b(certmd5[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
+				"captures": {
+					"1": { "name": "keyword.control.certmd5.monit" },
+					"2": { "name": "constant.character.monit" }
+				}
+			}]
+		},
+		"mailserver": {
+			"comment": "Monit mail server",
+			"patterns": [{
+				"begin": "(?i)\\b((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))([ ]+port[ ]+([\\d]+))?\\b",
+				"end": "(?i)\\b(?=(check|set|include))\\b",
+				"captures": {
+					"1": { "name": "constant.character.monit" },
+					"2": { "name": "keyword.control.mailserver.monit" },
+					"3": { "name": "constant.numeric.monit" }
+				},
+				"patterns": [{ "include": "#username" },
+					{ "include": "#password" },
+					{ "include": "#ssl" },
+					{ "include": "#sslchecksum" },
+					{ "include": "#sslversion" },
+					{ "include": "#certmd5"
+				}]
+			}]
+		},
+		"httpdoption": {
+			"comment": "Monit httpd options",
+			"patterns": [{ "include": "#ssl" },
+				{ "include": "#pemfile" },
+				{ "include": "#clientpemfile" },
+				{ "include": "#allowselfcert" },
+				{ "include": "#signature" },
+				{ "include": "#bindaddress" },
+				{ "include": "#allow" },
+				{ "include": "#httpdport" },
+				{ "include": "#httpdsocket" 
+			}]
+		},
+		"pemfile": {
 			"comment": "Monit pemfile options",
 			"patterns": [{
-				"match": "(?i)\\b(pemfile[ ]+)(\"\\/[^\"]+\"|'\\/[^']+'|\\/[\\w\\-_.\\/:#%]+)\\b",
+				"match": "(?i)\\b(pemfile[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
 				"captures": {
 					"1": { "name": "keyword.control.ssl.monit" },
 					"2": { "name": "constant.character.monit" }
 				}
 			}]
 		},
-		"clientpemfiles": {
+		"clientpemfile": {
 			"comment": "Monit clientpemfile options",
 			"patterns": [{
-				"match": "(?i)\\b(clientpemfile[ ]+)(\"\\/[^\"]+\"|'\\/[^']+'|\\/[\\w\\-_.\\/:#%]+)\\b",
+				"match": "(?i)\\b(clientpemfile[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
 				"captures": {
 					"1": { "name": "keyword.control.ssl.monit" },
 					"2": { "name": "constant.character.monit" }
 				}
 			}]
 		},
-		"allowselfcerts": {
+		"allowselfcert": {
 			"comment": "Monit allowselfcert options",
 			"patterns": [{
 				"match": "(?i)\\b(allowselfcertification)\\b",
@@ -2122,188 +3310,137 @@
 				}
 			}]
 		},
-		"signatures": {
+		"httpdport": {
+			"comment": "Monit httpdport options",
+			"patterns": [{
+				"match": "(?i)\\b((and[ ]+)?port[ ]+)([\\d]+)([ ]+read[-]?only)?\\b",
+				"captures": {
+					"1": { "name": "keyword.control.httpdport.monit" },
+					"2": { "name": "keyword.control.httpdport.monit" },
+					"3": { "name": "constant.numeric.monit" },
+					"4": { "name": "keyword.control.httpdport.monit" }
+				}
+			}]
+		},
+		"httpdsocket": {
+			"comment": "Monit httpdsocket options",
+			"patterns": [{
+				"match": "(?i)\\b(unixsocket[ ]+)([\"']?\\/[\\w\\-_.\\/]+[\"']?)\\b",
+				"captures": {
+					"1": { "name": "keyword.control.httpdsocket.monit" },
+					"2": { "name": "constant.character.monit" }
+				}
+			}]
+		},
+		"httpdsocketoption": {
+			"comment": "Monit httpdsocket options",
+			"patterns": [{
+				"match": "(?i)\\b((uid|gid)[ ]+)([\\d]+)\\b",
+				"captures": {
+					"1": { "name": "keyword.control.httpdsocketoption.monit" },
+					"2": { "name": "constant.numeric.monit" }
+				}
+			},{
+				"match": "(?i)\\b((uid|gid)[ ]+)([\"']?[\\w]+[\"']?)\\b",
+				"captures": {
+					"1": { "name": "keyword.control.httpdsocketoption.monit" },
+					"2": { "name": "constant.character.monit" }
+				}
+			},{
+				"match": "(?i)\\b(perm(ission)?[ ]+)([\\d]+)\\b",
+				"captures": {
+					"1": { "name": "keyword.control.httpdsocketoption.monit" },
+					"2": { "name": "constant.numeric.monit" }
+				}
+			},{
+				"match": "(?i)\\b(read[-]?only)\\b",
+				"captures": {
+					"1": { "name": "keyword.control.httpdsocketoption.monit" }
+				}
+			}]
+		},
+		"signature": {
 			"comment": "Monit signature options",
 			"patterns": [{
 				"match": "(?i)\\b(signature[ ]+)(enable|disable)\\b",
 				"captures": {
-					"1": { "name": "keyword.control.ssl.monit" },
+					"1": { "name": "keyword.control.signature.monit" },
 					"2": { "name": "constant.numeric.monit" }
 				}
 			}]
 
 		},
-		"bindaddresses": {
+		"bindaddress": {
 			"comment": "Monit bindaddress options",
 			"patterns": [{
 				"match": "(?i)\\b(use[ ]+)?(address[ ]+)([\\d\\w\\-_.]+)\\b",
 				"captures": {
-					"1": { "name": "keyword.control.sethttpd.monit" },
-					"2": { "name": "keyword.control.sethttpd.monit" },
+					"1": { "name": "keyword.control.bindaddress.monit" },
+					"2": { "name": "keyword.control.bindaddress.monit" },
 					"3": { "name": "constant.character.monit" }
 				}
 			}]
 		},
-		"allows": {
+		"allow": {
 			"comment": "Monit allow options",
 			"patterns": [{
 				"match": "(?i)\\b(allow[ ]+)([\\w]+:[\\w]+)([ ]+readonly)?\\b",
 				"captures": {
-					"1": { "name": "keyword.control.sethttpd.monit" },
-					"2": { "name": "constant.character.monitu" },
-					"3": { "name": "keyword.control.sethttpd.monit" }
+					"1": { "name": "keyword.control.allow.monit" },
+					"2": { "name": "constant.character.monit" },
+					"3": { "name": "keyword.control.allow.monit" }
 				}
 			},{
 				"match": "(?i)\\b(allow[ ]+)(@[\\w]+)([ ]+readonly)?\\b",
 				"captures": {
-					"1": { "name": "keyword.control.sethttpd.monit" },
-					"2": { "name": "constant.character.monitg" },
-					"3": { "name": "keyword.control.sethttpd.monit" }
+					"1": { "name": "keyword.control.allow.monit" },
+					"2": { "name": "constant.character.monit" },
+					"3": { "name": "keyword.control.allow.monit" }
 				}
 			},{
 				"match": "(?i)\\b(allow[ ]+(cleartext|md5|crypt)[ ]+)([\"']?\\/[\\w\\-_.\\/]+[\"']?)\\b",
 				"captures": {
-					"1": { "name": "keyword.control.sethttpd.monit" },
-					"2": { "name": "keyword.control.sethttpd.monit" },
-					"3": { "name": "constant.character.monit3" }
+					"1": { "name": "keyword.control.allow.monit" },
+					"2": { "name": "keyword.control.allow.monit" },
+					"3": { "name": "constant.character.monit" }
 				}
 			},{
 				"match": "(?i)\\b(allow[ ]+)([\"']?\\/[\\w\\-_.\\/]+[\"']?)\\b",
 				"captures": {
-					"1": { "name": "keyword.control.sethttpd.monit" },
-					"2": { "name": "constant.character.monit2" },
-					"3": { "name": "keyword.control.sethttpd.monit" }
+					"1": { "name": "keyword.control.allow.monit" },
+					"2": { "name": "constant.character.monit" },
+					"3": { "name": "keyword.control.allow.monit" }
 				}				
 			},{
 				"match": "(?i)\\b(allow[ ]+)([\\d.\\/]+)([ ]+readonly)?\\b",
 				"captures": {
-					"1": { "name": "keyword.control.sethttpd.monit" },
-					"2": { "name": "constant.character.moniti" },
-					"3": { "name": "keyword.control.sethttpd.monit" }
+					"1": { "name": "keyword.control.allow.monit" },
+					"2": { "name": "constant.character.monit" },
+					"3": { "name": "keyword.control.allow.monit" }
 				}
 			},{
 				"match": "(?i)\\b(allow[ ]+)([\\h:\\/]+)([ ]+readonly)?\\b",
 				"captures": {
-					"1": { "name": "keyword.control.sethttpd.monit" },
-					"2": { "name": "constant.character.monit6" },
-					"3": { "name": "keyword.control.sethttpd.monit" }
+					"1": { "name": "keyword.control.allow.monit" },
+					"2": { "name": "constant.character.monit" },
+					"3": { "name": "keyword.control.allow.monit" }
 				}
 			},{
 				"match": "(?i)\\b(allow[ ]+)([\\w\\-_.:]+)([ ]+readonly)?\\b",
 				"captures": {
-					"1": { "name": "keyword.control.sethttpd.monit" },
-					"2": { "name": "constant.character.monith" },
-					"3": { "name": "keyword.control.sethttpd.monit" }
+					"1": { "name": "keyword.control.allow.monit" },
+					"2": { "name": "constant.character.monit" },
+					"3": { "name": "keyword.control.allow.monit" }
 				}
 			}]
 		},
-		"httpdports": {
-			"comment": "Monit httpdport options",
-			"patterns": [{
-				"match": "(?i)\\b((and[ ]+)?port[ ]+)([\\d]+)([ ]+readonly)?\\b",
-				"captures": {
-					"1": { "name": "keyword.control.sethttpd.monit" },
-					"2": { "name": "keyword.control.sethttpd.monit" },
-					"3": { "name": "constant.numeric.monit3" },
-					"4": { "name": "keyword.control.sethttpd.monit" }
-				}
-			}]
-		},
-		"httpdsockets": {
-			"comment": "Monit httpdsocket options",
-			"patterns": [{
-				"match": "(?i)\\b(unixsocket[ ]+)([\"']?\\/[\\w\\-_.\\/]+[\"']?)\\b",
-				"captures": {
-					"1": { "name": "support.parameter.monit" },
-					"2": { "name": "constant.character.monit" }
-				}
-			}]
-		},
-		"readonlys": {
+		"readonly": {
 			"comment": "Monit readonly options",
 			"patterns": [{
 				"match": "(?i)\\b(readonly)\\b",
 				"captures": {
 					"1": { "name": "support.parameter.monit" }
 				}
-			}]
-		},
-		"limits": {
-			"comment": "Monit limit options",
-			"patterns": [{ "include": "#buffers" },
-				{ "include": "#timeouts"
-			}]
-		},
-		"buffers": {
-			"comment": "Monit buffer limit options",
-			"patterns": [{
-				"match": "(?i)\\b(sendexpectbuffer[ ]*:[ ]+)([\\d]+)\\b",
-				"captures": {
-					"1": { "name": "support.parameter.monit" },
-					"2": { "name": "constant.numeric.monit" }
-				}
-			},{
-				"match": "(?i)\\b(filecontentbuffer[ ]*:[ ]+)([\\d]+)\\b",
-				"captures": {
-					"1": { "name": "support.parameter.monit" },
-					"2": { "name": "constant.numeric.monit" }
-				}
-			},{
-				"match": "(?i)\\b(httpcontentbuffer[ ]*:[ ]+)([\\d]+)\\b",
-				"captures": {
-					"1": { "name": "support.parameter.monit" },
-					"2": { "name": "constant.numeric.monit" }
-				}
-			},{
-				"match": "(?i)\\b(programoutput[ ]*:[ ]+)([\\d]+)\\b",
-				"captures": {
-					"1": { "name": "support.parameter.monit" },
-					"2": { "name": "constant.numeric.monit" }
-				}
-			},{ "include": "#bytes" },
-			{ "include": "#comments"
-			}]
-		},
-		"timeouts": {
-			"comment": "Monit timeout limit options",
-			"patterns": [{
-				"match": "(?i)\\b(networktimeout[ ]*:[ ]+)([\\d]+)\\b",
-				"captures": {
-					"1": { "name": "support.parameter.monit" },
-					"2": { "name": "constant.numeric.monit" }
-				}
-			},{
-				"match": "(?i)\\b(programtimeout[ ]*:[ ]+)([\\d]+)\\b",
-				"captures": {
-					"1": { "name": "support.parameter.monit" },
-					"2": { "name": "constant.numeric.monit" }
-				}
-			},{
-				"match": "(?i)\\b(stoptimeout[ ]*:[ ]+)([\\d]+)\\b",
-				"captures": {
-					"1": { "name": "support.parameter.monit" },
-					"2": { "name": "constant.numeric.monit" }
-				}
-			},{
-				"match": "(?i)\\b(starttimeout[ ]*:[ ]+)([\\d]+)\\b",
-				"captures": {
-					"1": { "name": "support.parameter.monit" },
-					"2": { "name": "constant.numeric.monit" }
-				}
-			},{
-				"match": "(?i)\\b(restarttimeout[ ]*:[ ]+)([\\d]+)\\b",
-				"captures": {
-					"1": { "name": "support.parameter.monit" },
-					"2": { "name": "constant.numeric.monit" }
-				}
-			},{
-				"match": "(?i)\\b(exectimeout[ ]*:[ ]+)([\\d]+)\\b",
-				"captures": {
-					"1": { "name": "support.parameter.monit" },
-					"2": { "name": "constant.numeric.monit" }
-				}
-			},{ "include": "#seconds" },
-			{ "include": "#comments"
 			}]
 		},
 		"units": {
@@ -2372,135 +3509,32 @@
 				"match": "(?i)\\b(seconds|second|s)"
 			}]
 		},
-		"timestamps": {
-			"comment": "Monit timestamps",
-			"patterns": [{
-				"name": "support.type.atime.monit",
-				"match": "(?i)\\b(atime|access time(stamp)?)"
-			},{
-				"name": "support.type.ctime.monit",
-				"match": "(?i)\\b(ctime|change time(stamp)?)"
-			},{
-				"name": "support.type.mtime.monit",
-				"match": "(?i)\\b(mtime|modification time(stamp)?|modify time(stamp)?)"
-			},{
-				"name": "support.type.time.monit",
-				"match": "(?i)\\b(time(stamp)?)"
-			}]
-		},
-		"eventoptions": {
-			"comment": "Monit event options",
-			"patterns": [{
-				"name": "support.constant.monit",
-				"match": "(?i)(action)[,]?"
-			},{
-				"name": "support.constant.monit",
-				"match": "(?i)(bytein)[,]?"
-			},{
-				"name": "support.constant.monit",
-				"match": "(?i)(byteout)[,]?"
-			},{
-				"name": "support.constant.monit",
-				"match": "(?i)(checksum)[,]?"
-			},{
-				"name": "support.constant.monit",
-				"match": "(?i)(connection)[,]?"
-			},{
-				"name": "support.constant.monit",
-				"match": "(?i)(content)[,]?"
-			},{
-				"name": "support.constant.monit",
-				"match": "(?i)(data)[,]?"
-			},{
-				"name": "support.constant.monit",
-				"match": "(?i)(exec)[,]?"
-			},{
-				"name": "support.constant.monit",
-				"match": "(?i)(exist)[,]?"
-			},{
-				"name": "support.constant.monit",
-				"match": "(?i)(fsflag)[,]?"
-			},{
-				"name": "support.constant.monit",
-				"match": "(?i)(gid)[,]?"
-			},{
-				"name": "support.constant.monit",
-				"match": "(?i)(icmp)[,]?"
-			},{
-				"name": "support.constant.monit",
-				"match": "(?i)(instance)[,]?"
-			},{
-				"name": "support.constant.monit",
-				"match": "(?i)(invalid)[,]?"
-			},{
-				"name": "support.constant.monit",
-				"match": "(?i)(link)[,]?"
-			},{
-				"name": "support.constant.monit",
-				"match": "(?i)(nonexist)[,]?"
-			},{
-				"name": "support.constant.monit",
-				"match": "(?i)(packetin)[,]?"
-			},{
-				"name": "support.constant.monit",
-				"match": "(?i)(packetout)[,]?"
-			},{
-				"name": "support.constant.monit",
-				"match": "(?i)(permission)[,]?"
-			},{
-				"name": "support.constant.monit",
-				"match": "(?i)(pid)[,]?"
-			},{
-				"name": "support.constant.monit",
-				"match": "(?i)(ppid)[,]?"
-			},{
-				"name": "support.constant.monit",
-				"match": "(?i)(resource)[,]?"
-			},{
-				"name": "support.constant.monit",
-				"match": "(?i)(saturation)[,]?"
-			},{
-				"name": "support.constant.monit",
-				"match": "(?i)(size)[,]?"
-			},{
-				"name": "support.constant.monit",
-				"match": "(?i)(speed)[,]?"
-			},{
-				"name": "support.constant.monit",
-				"match": "(?i)(status)[,]?"
-			},{
-				"name": "support.constant.monit",
-				"match": "(?i)(timeout)[,]?"
-			},{
-				"name": "support.constant.monit",
-				"match": "(?i)(timestamp)[,]?"
-			},{
-				"name": "support.constant.monit",
-				"match": "(?i)(uid)[,]?"
-			},{
-				"name": "support.constant.monit",
-				"match": "(?i)(uptime)[,]?"
-			}]
-		},
 		"noises": {
 			"comment": "Monit noisy keywords",
 			"patterns": [{
 				"name": "keyword.other.monit",
-				"match": "(?i)\\b(is|as|are|for|via|on(ly)?|with(in|out)?|xprogram(s)?|and|has|using|use|the|to|sum|than|usage|was|times|but|of|or|does|per|in|last|rate|capacity|activity|option(s)?|ssl[ ]+disable|disable[ ]+ssl)\\b"
+				"match": "(?i)\\b(is|as|are|for|via|on(ly)?|with(in|out)?|Xprogram(s)?|and|has|using|use|the|to|sum|than|usage|was|times|but|of|or|does|per|in|last|rate|capacity|activity|option(s)?|ssl[ ]+disable|disable[ ]+ssl)\\b"
 			}]
 		},
-		"emails": {
+		"hosts": {
+			"comment": "Monit hosts",
+			"patterns": [{
+				"name": "constant.character.host.monit",
+				"match": "((\"[\\w\\-_.]+\")|('[\\w\\-_.]+')|([\\w\\-_.]+))"
+			}]
+		},
+		"mails": {
 			"comment": "Monit emails",
 			"patterns": [{
 				"name": "constant.character.email.monit",
-				"match": "[\\w\\-_.]+(@[\\w\\-_.]*)?"
+				"match": "((\"[\\w\\-_.]+(@[\\w\\-_.]*)?\")|('[\\w\\-_.]+(@[\\w\\-_.]*)?')|([\\w\\-_.]+(@[\\w\\-_.]*)?))"
 			}]
 		},
 		"paths": {
 			"comment": "Monit paths",
 			"patterns": [{
 				"name": "constant.character.path.monit",
-				"match": "([\"]\\/[^\"]+[\"]|[']\\/[^']+[']|\\/[\\w\\-_./*?]+)"
+				"match": "((\"\\/[^\"]*\")|('\\/[^']*')|(\\/[\\w\\-_.\\/:#%]+))"
 			}]
 		},
 		"strings": {
@@ -2581,18 +3615,24 @@
 			"comment": "Monit functions",
             "patterns": [{
 				"name": "support.function.monit",
-				"begin": "\\b([\\w\\d_]+)(\\()",
-				"end": "\\)",
-				"patterns": [{ "include": "source.shell"
-				}]
+				"begin": "[\\w\\d_]*\\(",
+				"end": "\\)"
 			}]
 		},
 		"constants": {
 			"comment": "Monit constant keywords",
 			"patterns": [{
 				"name": "support.constant.monit",
-				"match": "\\b(\\$EVENT|\\$SERVICE|\\$DATE|\\$HOST|\\$ACTION|\\$DESCRIPTION|\\$SYSTEM)\\b"
+				"match": "(\\$EVENT|\\$SERVICE|\\$DATE|\\$HOST|\\$ACTION|\\$DESCRIPTION|\\$SYSTEM)"
 			}]
+		},
+		"string": {
+			"match": "('([^']|\\')*')|(\"([^\"]|\\\")*\")",
+			"name": "string.quoted.double.proto"
+		},
+		"number": {
+			"name": "constant.numeric.proto",
+			"match": "\\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)\\b"
 		}
 	},
 	"scopeName": "source.monit"
