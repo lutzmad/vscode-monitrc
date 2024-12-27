@@ -3557,7 +3557,7 @@
 			"comment": "Monit noisy keywords",
 			"patterns": [{
 				"name": "keyword.other.monit",
-				"match": "(?i)\\b(is|as|are|for|via|on(ly)?|with(in|out)?|Xprogram(s)?|and|has|using|use|the|to|sum|than|usage|was|times|but|of|or|does|per|in|last|rate|capacity|activity|option(s)?|ssl[ ]+disable|disable[ ]+ssl)\\b"
+				"match": "(?i)\\b(is|as|are|for|via|on(ly)?|with(in|out)?|program(s)?|and|has|using|use|the|to|sum|than|usage|was|times|but|of|or|does|per|in|last|rate|capacity|activity|option(s)?|ssl[ ]+disable|disable[ ]+ssl)\\b"
 			}]
 		},
 		"hosts": {
