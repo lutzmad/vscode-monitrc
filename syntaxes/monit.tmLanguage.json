@@ -237,7 +237,7 @@
 					{ "include": "#certmd5"
 				}]
 			},{
-				"begin": "(?i)\\b(set[ ]+(tls|ssl[ ]+enable|enable[ ]+ssl|ssl))\\b",
+				"begin": "(?i)\\b(set[ ]+(tls|ssl[ ]+enable|enable[ ]+ssl|ssl)([ ]+option(s)?)?)\\b",
 				"end": "(?i)\\b(?=(check|set|include))\\b",
 				"captures": {
 					"1": { "name": "keyword.control.setssl.monit" }
@@ -382,7 +382,9 @@
 					{ "include": "#group" },
 					{ "include": "#depend" },
 					{ "include": "#resourceprocess" },
-					{ "include": "#useroption"
+					{ "include": "#useroption" },
+					{ "include": "#action" },
+					{ "include": "#recoverys"
 				}]
 			},{
 				"begin": "(?i)\\b(check[ ]+file[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
@@ -416,7 +418,9 @@
                 	{ "include": "#mode" },
                 	{ "include": "#onreboot" },
                 	{ "include": "#group" },
-                	{ "include": "#depend"
+                	{ "include": "#depend" },
+					{ "include": "#action" },
+					{ "include": "#recoverys"
 				}]
 			},{
 				"begin": "(?i)\\b(check[ ]+filesystem[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
@@ -450,7 +454,9 @@
 					{ "include": "#read" },
 					{ "include": "#write" },
 					{ "include": "#servicetime" },
-					{ "include": "#fsflag"
+					{ "include": "#fsflag" },
+					{ "include": "#action" },
+					{ "include": "#recoverys"
 				}]
 			},{
 				"begin": "(?i)\\b(check[ ]+directory[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
@@ -480,7 +486,9 @@
                 	{ "include": "#mode" },
                 	{ "include": "#onreboot" },
                 	{ "include": "#group" },
-                	{ "include": "#depend"
+                	{ "include": "#depend" },
+					{ "include": "#action" },
+					{ "include": "#recoverys"
 				}]
 			},{
 				"begin": "(?i)\\b(check[ ]+host[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
@@ -507,7 +515,9 @@
                 	{ "include": "#mode" },
                 	{ "include": "#onreboot" },
                 	{ "include": "#group" },
-                	{ "include": "#depend"
+                	{ "include": "#depend" },
+					{ "include": "#action" },
+					{ "include": "#recoverys"
 				}]
 			},{
 				"begin": "(?i)\\b(check[ ]+network[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
@@ -542,7 +552,9 @@
 					{ "include": "#onreboot" },
 					{ "include": "#alert" },
 					{ "include": "#group" },
-					{ "include": "#depend"
+					{ "include": "#depend" },
+					{ "include": "#action" },
+					{ "include": "#recoverys"
 				}]
 			},{
 				"begin": "(?i)\\b(check[ ]+system[ ]+)(\\$HOST|(\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
@@ -563,7 +575,9 @@
 					{ "include": "#depend" },
 					{ "include": "#resourcesystem" },
 					{ "include": "#uptime" },
-					{ "include": "#filedescriptorssystem"
+					{ "include": "#filedescriptorssystem" },
+					{ "include": "#action" },
+					{ "include": "#recoverys"
 				}]
 			},{
 				"begin": "(?i)\\b(check[ ]+fifo[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
@@ -593,7 +607,9 @@
 					{ "include": "#mode" },
 					{ "include": "#onreboot" },
 					{ "include": "#group" },
-					{ "include": "#depend"
+					{ "include": "#depend" },
+					{ "include": "#action" },
+					{ "include": "#recoverys"
 				}]
 			},{
 				"begin": "(?i)\\b(check[ ]+program[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
@@ -627,7 +643,9 @@
 					{ "include": "#depend" },
 					{ "include": "#statusvalue" },
 					{ "include": "#programmatch" },
-					{ "include": "#useroption"
+					{ "include": "#useroption" },
+					{ "include": "#action" },
+					{ "include": "#recoverys"
 				}]
 			}]
 		},
@@ -795,6 +813,7 @@
 					{ "include": "#rates"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -835,6 +854,7 @@
 					{ "include": "#rates"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -857,6 +877,7 @@
 					{ "include": "#rates"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -891,6 +912,7 @@
 					{ "include": "#comments"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -1230,18 +1252,12 @@
 		"status": {
 			"comment": "Monit status",
 			"patterns": [{
-				"begin": "(?i)\\b(status)",
-				"end": "(?i)\\b(?=(then|if))\\b",
+				"match": "(?i)\\b(status[ ]+)((more|greater|gt|>|older|ge|=>|less|lt|<|newer|le|<=|equal|eq|==|=|notequal|ne|!=|changed)[ ]+)([\\d]+)",
 				"captures": {
-					"1": { "name": "keyword.control.status.monit" }
-				},
-				"patterns": [{
-					"name": "constant.numeric.monit",
-					"match": "(?i)\\b([\\d]+)\\b"
-				},{ "include": "#comments" },
-					{ "include": "#operators"
-				}]
-			},{ "include": "#comments"
+					"1": { "name": "keyword.control.status.monit" },
+					"2": { "name": "keyword.operator.monit" },
+					"4": { "name": "constant.numeric.monit" }
+				}
 			}]
 		},
 		"method": {
@@ -1288,6 +1304,7 @@
 					{ "include": "#rates"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -1303,6 +1320,7 @@
 					{ "include": "#rates"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -1318,6 +1336,7 @@
 					{ "include": "#rates"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -1338,6 +1357,7 @@
 					{ "include": "#rates"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -1387,7 +1407,6 @@
 					"1": { "name": "keyword.control.icmpcount.monit" },
 					"2": { "name": "constant.numeric.monit" }
 				}
-			},{ "include": "#comments"
 			}]
 		},
 		"icmpsize": {
@@ -1398,38 +1417,40 @@
 					"1": { "name": "keyword.control.icmpsize.monit" },
 					"2": { "name": "constant.numeric.monit" }
 				}
-			},{ "include": "#comments"
 			}]
 		},
 		"icmptimeout": {
 			"comment": "Monit icmp timeout",
 			"patterns": [{
-				"begin": "(?i)\\b(timeout[ ]+)",
+				"begin": "(?i)\\b(timeout[ ]+)([\\d]+)([ ]+(seconds|second|s))\\b",
 				"end": "(?i)\\b(?=(if|then))\\b",
 				"captures": {
-					"1": { "name": "keyword.control.icmptimeout.monit" }
-				},
-				"patterns": [{
-					"name": "constant.numeric.monit",
-					"match": "(?i)\\b([\\d]+)\\b"
-				},{ "include": "#comments" },
-					{ "include": "#seconds"
-				}]
-			},{ "include": "#comments"
+					"1": { "name": "keyword.control.icmptimeout.monit" },
+					"2": { "name": "constant.numeric.monit" },
+					"3": { "name": "support.type.second.monit" }
+				}
 			}]
 		},
 		"icmpoutgoing": {
 			"comment": "Monit icmp outgoing",
 			"patterns": [{
-				"begin": "(?i)\\b(address[ ]+)",
-				"end": "(?i)\\b(?=(if|then))\\b",
+				"match": "(?i)(address[ ]+)([\\d.\\/]+)",
 				"captures": {
-					"1": { "name": "keyword.control.icmpoutgoing.monit" }
-				},
-				"patterns": [{ "include": "#comments" },
-					{ "include": "#strings"
-				}]
-			},{ "include": "#comments"
+					"1": { "name": "keyword.control.icmpoutgoing.monit" },
+					"2": { "name": "constant.character.monit" }
+				}
+			},{
+				"match": "(?i)(address[ ]+)([\\h:\\/]+)",
+				"captures": {
+					"1": { "name": "keyword.control.icmpoutgoing.monit" },
+					"2": { "name": "constant.character.monit" }
+				}
+			},{	
+				"match": "(?i)(address[ ]+)([\\w\\-_.]+)",
+				"captures": {
+					"1": { "name": "keyword.control.icmpoutgoing.monit" },
+					"2": { "name": "constant.character.monit" }
+				}
 			}]
 		},
 		"stoptimeout": {
@@ -1476,14 +1497,11 @@
 		"retry": {
 			"comment": "Monit retry",
 			"patterns": [{
-				"begin": "(?i)\\b(retry[ ]+)([\\d]+)",
-				"end": "(?i)\\b(?=(if|then))\\b",
+				"match": "(?i)\\b(retry[ ]+)([\\d]+)",
 				"captures": {
 					"1": { "name": "keyword.control.retry.monit" },
 					"2": { "name": "constant.numeric.monit" }
-				},
-				"patterns": [{ "include": "#comments"
-				}]
+				}
 			}]
 		},
 		"actionrate": {
@@ -1506,21 +1524,19 @@
 				"name": "keyword.control.actionrate.monit",
 				"match": "(?i)\\b(timeout)\\b"
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
 		"urloption": {
 			"comment": "Monit url option",
 			"patterns": [{
-				"begin": "(?i)\\b(content[ ]+)",
-				"end": "(?i)\\b(?=(if|then))\\b",
+				"match": "(?i)\\b(content[ ]+)((notequal|ne|!=|equal|eq|==|=)[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
 				"captures": {
-					"1": { "name": "keyword.control.urloption.monit" }
-				},
-				"patterns": [{ "include": "#comments" },
-					{ "include": "#urloperator" },
-					{ "include": "#strings"
-				}]
+					"1": { "name": "keyword.control.urloption.monit" },
+					"2": { "name": "keyword.operator.monit" },
+					"4": { "name": "constant.character.monit" }
+				}
 			}]
 		},
 		"urloperator": {
@@ -1825,6 +1841,7 @@
 					{ "include": "#rates"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -1960,6 +1977,7 @@
 					{ "include": "#rates"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -2137,6 +2155,7 @@
 					{ "include": "#rates"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -2191,6 +2210,7 @@
 					{ "include": "#rates"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -2355,11 +2375,11 @@
 		"recoverys": {
 			"comment": "Monit recovery",
 			"patterns": [{
-				"begin": "(?i)\\b(else[ ]+if[ ]+(recovered|passed|succeeded|failed)[ ]+)([\\d]+)\\b",
+				"begin": "(?i)\\b(else[ ]+if[ ]+)(recovered|passed|succeeded|failed)\\b",
 				"end": "(?i)\\b(?=(then|if))\\b",
 				"captures": {
 					"1": { "name": "keyword.control.recovery.monit" },
-					"2": { "name": "constant.numeric.monit" }
+					"2": { "name": "constant.language.monit" }
 				},
 				"patterns": [{ "include": "#comments" },
 					{ "include": "#rates"
@@ -2368,8 +2388,7 @@
 				"begin": "(?i)\\b(else)\\b",
 				"end": "(?i)\\b(?=(then|if))\\b",
 				"captures": {
-					"1": { "name": "keyword.control.recovery.monit" },
-					"2": { "name": "constant.numeric.monit" }
+					"1": { "name": "keyword.control.recovery.monit" }
 				},
 				"patterns": [{ "include": "#comments" },
 					{ "include": "#rates"
@@ -2402,6 +2421,7 @@
 					{ "include": "#rates"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -2443,6 +2463,7 @@
 					{ "include": "#rates"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -2477,6 +2498,7 @@
 					{ "include": "#rates"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -2498,6 +2520,7 @@
 					{ "include": "#rates"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -2519,6 +2542,7 @@
 					{ "include": "#rates"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -2539,6 +2563,7 @@
 					{ "include": "#rates"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -2554,6 +2579,7 @@
 					{ "include": "#rates"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -2597,6 +2623,7 @@
 					{ "include": "#rates"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -2623,6 +2650,7 @@
 					{ "include": "#rates"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -2675,6 +2703,7 @@
 					{ "include": "#rates"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -2704,6 +2733,7 @@
 					{ "include": "#rates"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -2732,6 +2762,7 @@
 					{ "include": "#rates"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -2752,6 +2783,7 @@
 					{ "include": "#rates"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -2772,6 +2804,7 @@
 					{ "include": "#rates"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -2789,6 +2822,7 @@
 					{ "include": "#rates"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -2808,6 +2842,7 @@
 					{ "include": "#rates"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -2827,6 +2862,7 @@
 					{ "include": "#rates"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -2846,6 +2882,7 @@
 					{ "include": "#rates"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -2866,6 +2903,7 @@
 					{ "include": "#rates"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -2899,6 +2937,7 @@
 					{ "include": "#rates"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -2914,6 +2953,7 @@
 					{ "include": "#rates"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -2933,6 +2973,7 @@
 					{ "include": "#rates"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -2977,6 +3018,7 @@
 					{ "include": "#rates"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -3021,6 +3063,7 @@
 					{ "include": "#rates"
 				}]
 			},{ "include": "#comments" },
+				{ "include": "#noises" },
 				{ "include": "#action"
 			}]
 		},
@@ -3173,7 +3216,7 @@
 		"ssl": {
 			"comment": "Monit ssl options",
 			"patterns": [{
-				"begin": "(?i)\\b((with[ ]+)?(tls|ssl[ ]+enable|enable[ ]+ssl|ssl)[ ]+\\{)",
+				"begin": "(?i)\\b((with[ ]+)?(tls|ssl[ ]+enable|enable[ ]+ssl|ssl)[ ]+(option(s)?[ ]+)?\\{)",
 				"end": "(?i)(?=(\\}))",
 				"captures": {
 					"1": { "name": "keyword.control.ssl.monit" }
@@ -3296,6 +3339,7 @@
 					"3": { "name": "constant.numeric.monit" }
 				},
 				"patterns": [{ "include": "#comments" },
+					{ "include": "#noises" },
 					{ "include": "#username" },
 					{ "include": "#password" },
 					{ "include": "#ssl" },
@@ -3307,8 +3351,7 @@
 		},
 		"httpdoption": {
 			"comment": "Monit httpd options",
-			"patterns": [{ "include": "#comments" },
-				{ "include": "#ssl" },
+			"patterns": [{ "include": "#ssl" },
 				{ "include": "#pemfile" },
 				{ "include": "#clientpemfile" },
 				{ "include": "#allowselfcert" },
@@ -3378,7 +3421,7 @@
 					"2": { "name": "constant.numeric.monit" }
 				}
 			},{
-				"match": "(?i)\\b((uid|gid)[ ]+)([\"']?[\\w\\-_.\\/:#%]+[\"']?)\\b",
+				"match": "(?i)\\b((uid|gid)[ ]+)((\"\\/[^\"]*\")|('\\/[^']*')|(\\/[\\w\\-_.\\/:#%]+))\\b",
 				"captures": {
 					"1": { "name": "keyword.control.httpdsocketoption.monit" },
 					"2": { "name": "constant.character.monit" }
