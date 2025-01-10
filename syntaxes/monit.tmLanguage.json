@@ -653,7 +653,7 @@
 			"comment": "Monit programs",
 			"patterns": [{
 				"begin": "(?i)\\b((start|stop|restart)[ ]+(program(s)?[ ]+)?(=[ ]+)?)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
-				"end": "(?i)\\b(?=(if|then|ignore|start|stop|restart|group|depend(s)?|(not[ ]+)?every|alert|mode|onreboot|check|set|include))\\b",
+				"end": "(?i)\\b(?=(if|then|else|ignore|start|stop|restart|group|depend(s)?|(not[ ]+)?every|alert|mode|onreboot|check|set|include))\\b",
 				"captures": {
 					"1": { "name": "keyword.control.program.monit" },
 					"6": { "name": "constant.character.monit" }
@@ -1553,7 +1553,7 @@
 			"comment": "Monit alert",
 			"patterns": [{
 				"begin": "(?i)(alert[ ]+)([\\w\\-_.]+(@[\\w\\-_.]*)?)(([ ]+not)?([ ]+on)?)",
-				"end": "(?i)\\b(?=(if|then|ignore|start|stop|restart|group|depend(s)?|(not[ ]+)?every|alert|mode|onreboot|check|set|include))\\b",
+				"end": "(?i)\\b(?=(if|then|else|ignore|start|stop|restart|group|depend(s)?|(not[ ]+)?every|alert|mode|onreboot|check|set|include))\\b",
 				"captures": {
 					"1": { "name": "keyword.control.alert.monit" },
 					"2": { "name": "constant.character.monit" },
@@ -1577,7 +1577,7 @@
 				}]
 			},{
 				"begin": "(?i)((noalert|alert)[ ]+)([\\w\\-_.]+(@[\\w\\-_.]*)?)\\b",
-				"end": "(?i)\\b(?=(if|then|ignore|start|stop|restart|group|depend(s)?|(not[ ]+)?every|alert|mode|onreboot|check|set|include))\\b",
+				"end": "(?i)\\b(?=(if|then|else|ignore|start|stop|restart|group|depend(s)?|(not[ ]+)?every|alert|mode|onreboot|check|set|include))\\b",
 				"captures": {
 					"1": { "name": "keyword.control.alert.monit" },
 					"3": { "name": "constant.character.monit" }
@@ -1687,7 +1687,7 @@
 		"formats": {
 			"comment": "Monit mail formats",
 			"begin": "(?i)(mail-format)",
-			"end": "(?i)\\b(?=(if|then|ignore|start|stop|restart|group|depend(s)?|(not[ ]+)?every|alert|mode|onreboot|check|set|include))\\b",
+			"end": "(?i)\\b(?=(if|then|else|ignore|start|stop|restart|group|depend(s)?|(not[ ]+)?every|alert|mode|onreboot|check|set|include))\\b",
 			"captures": {
 				"1": { "name": "keyword.control.format.monit" }
 			},
@@ -1773,7 +1773,7 @@
 			"comment": "Monit group",
 			"patterns": [{
 				"begin": "(?i)\\b(group[ ]+)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
-					"end": "(?i)\\b(?=(if|then|ignore|start|stop|restart|group|depend(s)?|(not[ ]+)?every|alert|mode|onreboot|check|set|include))\\b",
+				"end": "(?i)\\b(?=(if|then|else|ignore|start|stop|restart|group|depend(s)?|(not[ ]+)?every|alert|mode|onreboot|check|set|include))\\b",
 				"captures": {
 					"1": { "name": "keyword.control.group.monit" },
 					"2": { "name": "constant.character.monit" }
@@ -1799,7 +1799,7 @@
 			"comment": "Monit depends",
 			"patterns": [{
 				"begin": "(?i)\\b(depend(s)?)([ ]+on)?\\b",
-				"end": "(?i)\\b(?=(if|then|ignore|start|stop|restart|group|depend(s)?|(not[ ]+)?every|alert|mode|onreboot|check|set|include))\\b",
+				"end": "(?i)\\b(?=(if|then|else|ignore|start|stop|restart|group|depend(s)?|(not[ ]+)?every|alert|mode|onreboot|check|set|include))\\b",
 				"captures": {
 					"1": { "name": "keyword.control.depend.monit" },
 					"3": { "name": "keyword.control.depend.monit" }
@@ -2309,7 +2309,7 @@
 				}
 			},{
 				"begin": "(?i)\\b(then[ ]+exec)([ ]+((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+)))",
-				"end": "(?i)\\b(?=(if|then|ignore|start|stop|restart|group|depend(s)?|(not[ ]+)?every|alert|mode|onreboot|check|set|include))\\b",
+				"end": "(?i)\\b(?=(if|then|else|ignore|start|stop|restart|group|depend(s)?|(not[ ]+)?every|alert|mode|onreboot|check|set|include))\\b",
 				"captures": {
 					"1": { "name": "keyword.control.action.monit" },
 					"2": { "name": "constant.character.monit" }
