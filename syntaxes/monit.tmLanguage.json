@@ -3241,7 +3241,7 @@
 					"2": { "name": "constant.language.monit" }
 				}
 			},{
-				"match": "(?i)\\b(version[ ]*:[ ]+)(([\\-]?(sslv2|sslv3|tlsv1|tlsv11|tlsv12|tlsv13))|auto)\\b",
+				"match": "(?i)\\b(version[ ]*:[ ]*)(([ ]+[\\-]?(sslv2|sslv3|tlsv11|tlsv12|tlsv13|tlsv1)){1,6}|auto)\\b",
 				"captures": {
 					"1": { "name": "keyword.control.ssloption.monit" },
 					"2": { "name": "constant.language.monit" }
