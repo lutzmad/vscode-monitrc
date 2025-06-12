@@ -66,6 +66,24 @@
 				},{ "include": "#comments"
 				}]
 			},{
+				"begin": "(?i)\\b(set[ ]+interval[ ]+)([\\d]+)\\b",
+				"end": "(?i)\\b(?=(check|set|include))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.setinterval.monit" },
+					"2": { "name": "constant.numeric.monit" }
+				},
+				"patterns": [{
+					"name": "keyword.control.setinterval.monit",
+					"match": "(?i)\\b(with)\\b"
+				},{
+					"match": "(?i)\\b(start[ ]+delay[ ]+)([\\d]+)\\b",
+					"captures": {
+						"1": { "name": "keyword.control.setinterval.monit" },
+						"2": { "name": "constant.numeric.monit" }
+					}
+				},{ "include": "#comments"
+				}]
+			},{
 				"begin": "(?i)\\b(set[ ]+terminal[ ]+batch)\\b",
 				"end": "(?i)\\b(?=(check|set|include))\\b",
 				"captures": {
