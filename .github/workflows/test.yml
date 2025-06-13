@@ -19,7 +19,9 @@ jobs:
         run: npm install
 
       - name: Install vsce
-        run: npm install -g @vscode/vsce
+        run: |
+          npm install -g @vscode/vsce
+          [ $? -ne 0 ] && cat /home/runner/.npm/_logs/*.log; false
 
       - name: Build
         run: vsce package
