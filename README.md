@@ -38,6 +38,10 @@ The noise keywords like "and", "with(in)", "has", "us(ing|e)", "on(ly)", "for", 
 
 The extension release notes.
 
+### 0.0.2
+
+Handle the "interval" statement used instead of "daemon" in the future.
+
 ### 0.0.1
 
 Initial release.
