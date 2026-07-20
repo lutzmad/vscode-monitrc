@@ -1086,7 +1086,7 @@
 				},
 				"patterns": [{
 					"name": "keyword.control.protocol.monit",
-					"match": "(?i)\\b(rsakey[ ]+checksum([ ]+(md5|sha1))?([ ]+(equal|eq|==|=))?)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
+					"match": "(?i)\\b(rsakey[ ]+checksum([ ]+(md5|sha1|sha256))?([ ]+(equal|eq|==|=))?)((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
 					"captures": {
 						"1": { "name": "keyword.control.protocol.monit" },
 						"4": { "name": "keyword.operator.monit" },
@@ -1742,9 +1742,8 @@
 				"captures": {
 					"1": { "name": "keyword.control.formatoption.monit" }
 				}
-			},{ "include": "#constants"
 			},{	
-				"match": "(?i)\\b([\\w\\-_.\\/:#%!\"$%&/()=?*+'#<>,;: \\[\\]]+)",
+				"match": "(?i)\\b([\\w\\-_.\\/:#%!\"$&()=?*+'#<>,;: \\[\\]@]+)",
 				"captures": {
 					"1": { "name": "constant.character.monit" }
 				}
@@ -2033,6 +2032,34 @@
 				"end": "(?i)\\b(?=(then|if))\\b",
 				"captures": {
 					"1": { "name": "keyword.control.resourceswap.monit" }
+				},
+				"patterns": [{
+					"name": "constant.numeric.monit",
+					"match": "(?i)([\\d]+)[ ]?(percent|%)?"
+				},{ "include": "#comments" },
+					{ "include": "#operators" },
+					{ "include": "#units" },
+					{ "include": "#rates"
+				}]
+			},{
+				"begin": "(?i)\\b(if[ ]+pagein)",
+				"end": "(?i)\\b(?=(then|if))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.resourcepage.monit" }
+				},
+				"patterns": [{
+					"name": "constant.numeric.monit",
+					"match": "(?i)([\\d]+)[ ]?(percent|%)?"
+				},{ "include": "#comments" },
+					{ "include": "#operators" },
+					{ "include": "#units" },
+					{ "include": "#rates"
+				}]
+			},{
+				"begin": "(?i)\\b(if[ ]+pageout)",
+				"end": "(?i)\\b(?=(then|if))\\b",
+				"captures": {
+					"1": { "name": "keyword.control.resourcepage.monit" }
 				},
 				"patterns": [{
 					"name": "constant.numeric.monit",
@@ -2397,7 +2424,7 @@
 				"end": "(?i)\\b(?=(then|if))\\b",
 				"captures": {
 					"1": { "name": "keyword.control.recovery.monit" },
-					"2": { "name": "constant.language.monit" }
+					"2": { "name": "keyword.control.recovery.monit" }
 				},
 				"patterns": [{ "include": "#comments" },
 					{ "include": "#rates"
@@ -2416,7 +2443,7 @@
 		"checksum": {
 			"comment": "Monit checksum tests",
 			"patterns": [{
-				"begin": "(?i)\\b(if[ ]+failed([ ]+(md5|sha1))?[ ]+checksum)",
+				"begin": "(?i)\\b(if[ ]+failed([ ]+(md5|sha1|sha256))?[ ]+checksum)",
 				"end": "(?i)\\b(?=(then|if))\\b",
 				"captures": {
 					"1": { "name": "keyword.control.checksum.monit" }
@@ -2430,7 +2457,7 @@
 					{ "include": "#rates"
 				}]
 			},{
-				"begin": "(?i)\\b(if[ ]+changed([ ]+(md5|sha1))?[ ]+checksum)",
+				"begin": "(?i)\\b(if[ ]+changed([ ]+(md5|sha1|sha256))?[ ]+checksum)",
 				"end": "(?i)\\b(?=(then|if))\\b",
 				"captures": {
 					"1": { "name": "keyword.control.checksum.monit" }
@@ -2446,7 +2473,7 @@
 		"hashtype": {
 			"comment": "Monit hash type",
 			"patterns": [{
-				"match": "(?i)\\b((md5|sha1)))",
+				"match": "(?i)\\b((md5|sha1|sha256)))",
 				"captures": {
 					"1": { "name": "keyword.control.hashtype.monit" }
 				}
@@ -3105,7 +3132,7 @@
 					"1": { "name": "keyword.control.include.monit" }
 				},
 				"patterns": [{
-					"match": "((\"\\/[^\"]*\")|('\\/[^']*')|(\\/[\\w\\-_.\\/:#%!\"$%&/()=?*+'#<>,;: \\[\\]]+))",
+					"match": "((\"\\/[^\"]*\")|('\\/[^']*')|(\\/[\\w\\-_.\\/:#%!\"$&()=?*+'#<>,;: \\[\\]]+))",
 					"captures": {
 						"1": { "name": "constant.character.monit" }
 					}
@@ -3305,7 +3332,7 @@
 		"sslchecksum": {
 			"comment": "Monit ssl checksum",
 			"patterns": [{
-				"match": "(?i)\\b(certificate[ ]+checksum[ ]+((md5|sha1)[ ]+)?)((equal|eq|==|=)[ ]+)?((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
+				"match": "(?i)\\b(certificate[ ]+checksum[ ]+((md5|sha1|sha256)[ ]+)?)((equal|eq|==|=)[ ]+)?((\"[^\"]*\")|('[^']*')|([\\w\\-_.\\/:#%]+))",
 				"captures": {
 					"1": { "name": "keyword.control.sslchecksum.monit" },
 					"4": { "name": "keyword.operator.monit" },
@@ -3470,13 +3497,13 @@
 		"bindaddress": {
 			"comment": "Monit bind address options",
 			"patterns": [{
-				"match": "(?i)((use[ ]+)?address[ ]+)([\\d.\\/]+)",
+				"match": "(?i)((use[ ]+)?address[ ]+)([\\d]+.[\\d.\\/]+)",
 				"captures": {
 					"1": { "name": "keyword.control.bindaddress.monit" },
 					"3": { "name": "constant.character.monit" }
 				}
 			},{
-				"match": "(?i)((use[ ]+)?address[ ]+)([\\h:\\/]+)",
+				"match": "(?i)((use[ ]+)?address[ ]+)(([\\h]+:[\\h:\\/]+)",
 				"captures": {
 					"1": { "name": "keyword.control.bindaddress.monit" },
 					"3": { "name": "constant.character.monit" }
@@ -3731,7 +3758,10 @@
 			"comment": "Monit constant keywords",
 			"patterns": [{
 				"name": "support.constant.monit",
-				"match": "(\\$EVENT|\\$SERVICE|\\$DATE|\\$HOST|\\$ACTION|\\$DESCRIPTION|\\$SYSTEM)"
+				"match": "\\b(\\$EVENT|\\$SERVICE|\\$DATE|\\$HOST|\\$ACTION|\\$DESCRIPTION|\\$SYSTEM)\\b"
+			},{
+				"name": "support.other.monit",
+                "match": "\\b(\\$[\\w]+)\\b"
 			}]
 		}
 	},
