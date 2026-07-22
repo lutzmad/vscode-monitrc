@@ -38,6 +38,11 @@ The noise keywords like "and", "with(in)", "has", "us(ing|e)", "on(ly)", "for", 
 
 The extension release notes.
 
+### 0.0.3
+
+Fix some failures.
+Some changes to support the new Monit version.
+
 ### 0.0.2
 
 Handle the "interval" statement used instead of "daemon" in the future.
