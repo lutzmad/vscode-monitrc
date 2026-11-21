@@ -66,24 +66,6 @@
 				},{ "include": "#comments"
 				}]
 			},{
-				"begin": "(?i)\\b(set[ ]+interval[ ]+)([\\d]+)\\b",
-				"end": "(?i)\\b(?=(check|set|include))",
-				"captures": {
-					"1": { "name": "keyword.control.setinterval.monit" },
-					"2": { "name": "constant.numeric.monit" }
-				},
-				"patterns": [{
-					"name": "keyword.control.setinterval.monit",
-					"match": "(?i)\\b(with)\\b"
-				},{
-					"match": "(?i)\\b(start[ ]+delay[ ]+)([\\d]+)\\b",
-					"captures": {
-						"1": { "name": "keyword.control.setinterval.monit" },
-						"2": { "name": "constant.numeric.monit" }
-					}
-				},{ "include": "#comments"
-				}]
-			},{
 				"begin": "(?i)\\b(set[ ]+terminal[ ]+batch)\\b",
 				"end": "(?i)\\b(?=(check|set|include))",
 				"captures": {
@@ -560,6 +542,7 @@
 					{ "include": "#noises" },
 					{ "include": "#programs" },
 					{ "include": "#linkstatus" },
+					{ "include": "#linkerror" },
 					{ "include": "#linkspeed" },
 					{ "include": "#linksaturation" },
 					{ "include": "#upload" },
@@ -2986,6 +2969,22 @@
 				{ "include": "#action"
 			}]
 		},
+		"linkerror": {
+			"comment": "Monit link error tests",
+			"patterns": [{
+				"begin": "(?i)\\b(if[ ]+link[ ]+errors)",
+				"end": "(?i)\\b(?=(then|if))",
+				"captures": {
+					"1": { "name": "keyword.control.linkerror.monit" }
+				},
+				"patterns": [{ "include": "#comments" },
+					{ "include": "#rates"
+				}]
+			},{ "include": "#comments" },
+				{ "include": "#noises" },
+				{ "include": "#action"
+			}]
+		},
 		"linkspeed": {
 			"comment": "Monit link speed tests",
 			"patterns": [{
@@ -3221,6 +3220,12 @@
 				}
 			},{
 				"match": "(?i)\\b(exectimeout[ ]*:[ ]+)([\\d]+)\\b",
+				"captures": {
+					"1": { "name": "keyword.control.timeout.monit" },
+					"2": { "name": "constant.numeric.monit" }
+				}
+			},{
+				"match": "(?i)\\b(shutdowntimeout[ ]*:[ ]+)([\\d]+)\\b",
 				"captures": {
 					"1": { "name": "keyword.control.timeout.monit" },
 					"2": { "name": "constant.numeric.monit" }
